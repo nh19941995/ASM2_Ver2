@@ -1,7 +1,9 @@
 package com.example.demo.repository.custom;
 
 import com.example.demo.entity.Company;
+import com.example.demo.entity.Recruitment;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class CompanyCustomRepoImpl implements CompanyCustomRepo {
@@ -28,29 +31,29 @@ public class CompanyCustomRepoImpl implements CompanyCustomRepo {
         // tạo câu lệnh truy vấn tìm ra công ty tuyển nhiều nhất
         String jpql = "SELECT c " +
                 "FROM " +
-                    "Company c " +
+                "Company c " +
                 // lấy dữ liệu khớp ở cả 2 bảng
                 "JOIN " +
-                    "c.recruitments r " +
+                "c.recruitments r " +
                 "WHERE " +
-                    "r.createdAt > :oneYearAgo " +
+                "r.createdAt > :oneYearAgo " +
                 "GROUP BY " +
-                    "c.id " +
+                "c.id " +
                 "ORDER BY " +
-                    "SUM(r.quantity) DESC";
+                "SUM(r.quantity) DESC";
 
 
         String jpql2 = "SELECT c " +
                 "FROM " +
-                    "Recruitment r " +
+                "Recruitment r " +
                 "LEFT JOIN " +
-                    "Company c ON r.company.id = c.id " +
+                "Company c ON r.company.id = c.id " +
                 "WHERE " +
-                    "r.createdAt > :oneYearAgo " +
+                "r.createdAt > :oneYearAgo " +
                 "GROUP BY " +
-                    "c.id " +
+                "c.id " +
                 "ORDER BY " +
-                    "SUM(r.quantity) DESC";
+                "SUM(r.quantity) DESC";
 
         // tạo query và thêm tham số truy vấn
         TypedQuery<Company> query = entityManager.createQuery(jpql, Company.class);
@@ -70,6 +73,24 @@ public class CompanyCustomRepoImpl implements CompanyCustomRepo {
         // Tạo Page bằng phương thức riêng
         return createPage(query.getResultList(), pageable, totalRows);
     }
+
+    @Override
+    public Optional<Recruitment> isRecruitmentBelongsToCompany(Long companyId, Long recruitmentId) {
+        String jpql = "SELECT r " +
+                "FROM Recruitment r " +
+                "WHERE r.company.id = :companyId " +
+                "AND r.id = :recruitmentId";
+        try {
+            Recruitment recruitment = entityManager.createQuery(jpql, Recruitment.class)
+                    .setParameter("companyId", companyId)
+                    .setParameter("recruitmentId", recruitmentId)
+                    .getSingleResult();
+            return Optional.ofNullable(recruitment);
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
+    }
+
 
     private Long countTotalRecruitingCompanies(LocalDate oneYearAgo) {
         String countJpql = "SELECT COUNT(DISTINCT c) " +

@@ -30,31 +30,31 @@
 
                             <!--  recruiments list-->
                             <th:block th:if="${recruitments.getContent().size() > 0}"
-                                      th:each="recruitment : ${recruitments}"
+                                      th:each="r : ${recruitments}"
                             >
                                 <div class="col-md-12 ">
                                     <div class="job-post-item p-4 d-block d-lg-flex align-items-center">
                                         <div class="one-third mb-4 mb-md-0">
                                             <div class="job-post-item-header align-items-center">
-                                                <span class="subadge" th:text="${recruitment.type.name}"></span>
+                                                <span class="subadge" th:text="${r.type.name}"></span>
                                                 <h2 class="mr-3 text-black">
-                                                    <a th:text="${recruitment.title}"
-                                                       th:href="@{/recruitment/detail(recruitmentId=${recruitment.id},userId=${user.id},companyId=${recruitment.company.id})}"
+                                                    <a th:text="${r.title}"
+                                                       th:href="@{/recruitment/detail(recruitmentId=${r.id},userId=${user.id},companyId=${r.company.id})}"
                                                     ></a>
                                                 </h2>
                                             </div>
                                             <div class="job-post-item-body d-block d-md-flex">
                                                 <div class="mr-3"><span class="icon-layers"></span>
-                                                    <a href="#" th:text="${recruitment.Company.nameCompany}"></a>
+                                                    <a href="#" th:text="${r.company.nameCompany}"></a>
                                                 </div>
                                                 <div><span class="icon-my_location"></span>
-                                                    <span th:text="${recruitment.address}"></span>
+                                                    <span th:text="${r.address}"></span>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div th:with="urlUpdate= @{/recruitment/update(userId=${user.id}, companyId=${recruitment.company.id},recruitmentId=${recruitment.id})},
-                                              urlDelete= @{/recruitment/delete(userId=${user.id}, companyId=${recruitment.company.id},recruitmentId=${recruitment.id})}"
+                                        <div th:with="urlUpdate= @{/recruitment/update(userId=${user.id}, companyId=${r.company.id},recruitmentId=${r.id})},
+                                              urlDelete= @{/recruitment/delete(userId=${user.id}, companyId=${r.company.id},recruitmentId=${r.id})}"
                                              class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0"
                                              style="width: 400px !important;">
 <!--                                            <div>-->
@@ -70,7 +70,7 @@
                                             <!-- End Button trigger modal detail-->
 
                                             <a type="button" class="btn btn-info py-2 ml-2"
-                                               th:href="@{/recruitment/detail(recruitmentId=${recruitment.id},userId=${user.id},companyId=${recruitment.company.id})}"
+                                               th:href="@{/recruitment/detail(recruitmentId=${r.id},userId=${user.id},companyId=${r.company.id})}"
                                             >Xem chi tiết </a>
 
                                             <a sec:authorize="hasRole('MANAGER')"  th:href="${urlUpdate}"
@@ -79,14 +79,14 @@
                                             <!--     Button trigger modal apply -->
                                             <div sec:authorize="isAuthenticated()">
                                                 <button th:if="${company == null}" type="button" class="btn btn-primary py-2 ml-2" data-toggle="modal"
-                                                        th:attr="data-target=@{#applyModal{id}(id=${recruitment.id})}"
+                                                        th:attr="data-target=@{#applyModal{id}(id=${r.id})}"
                                                 >Apply</button>
                                             </div>
                                             <!-- End Button trigger modal detail-->
 
                                             <!-- Button trigger modal delete-->
                                             <button sec:authorize="hasRole('MANAGER')" type="button" class="btn btn-danger py-2 ml-2" data-toggle="modal"
-                                                    th:attr="data-target=@{#deleteModal{id}(id=${recruitment.id})}"
+                                                    th:attr="data-target=@{#deleteModal{id}(id=${r.id})}"
                                             >Xóa
                                             </button>
                                             <!-- End Button trigger modal delete-->
@@ -103,7 +103,7 @@
 
                                 <!-- Modal apply -->
                                 <th:block
-                                        th:insert="~{old/public/fragments/home/modal/moda-apply.html::moda-apply(${recruitment})} ">
+                                        th:insert="~{old/public/fragments/home/modal/moda-apply.html::moda-apply(${r})} ">
                                 </th:block>
                                 <!-- End Modal apply -->
 
@@ -111,7 +111,7 @@
                                 <!-- modal delete-->
                                 <th:block
                                         th:with="userId=${param.userId}"
-                                        th:insert="~{old/public/fragments/post-list/modal/modal-delete.html::delete(${recruitment},${userId},${recruitment.company.id})} ">
+                                        th:insert="~{old/public/fragments/post-list/modal/modal-delete.html::delete(${r},${userId},${r.company.id})} ">
                                 </th:block>
                                 <!-- end modal delete-->
 

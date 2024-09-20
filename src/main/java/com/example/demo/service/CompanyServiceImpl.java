@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Company;
+import com.example.demo.entity.Recruitment;
 import com.example.demo.entity.Status;
 import com.example.demo.entity.User;
 import com.example.demo.exception.ResourceNotFoundException;
@@ -75,5 +76,10 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public Page<Company> findTop(PaginationRequest paginationRequest) {
         return companyRepo.findTop(paginationRequest.toPageable());
+    }
+
+    @Override
+    public Optional<Recruitment> isRecruitmentBelongsToCompany(Long companyId,Long recruitmentId) {
+         return companyRepo.isRecruitmentBelongsToCompany(companyId,recruitmentId);
     }
 }

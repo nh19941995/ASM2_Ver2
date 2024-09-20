@@ -207,13 +207,13 @@
                 <div class="row">
                     <th:block th:if="${applyPosts != null}"
                               th:each="applyPost : ${applyPosts.getContent()}">
-                        <div class="col-md-12" style="box-shadow: rgba(0, 0, 0, 0.4) 0px 0px 10px;margin: 20px auto;">
+                        <div class="col-md-12" style="box-shadow: rgba(0, 0, 0, 0.4) 0 0 10px;margin: 20px auto;">
                             <div class="team d-md-flex p-4 bg-white">
                                 <img class="img"
                                      th:with="urlAvatar=${'http://localhost:8080/avatar/'}"
-                                     th:attr="src=${applyPost.cv.user.image != null
+                                     th:src="${applyPost.cv.user.image != null
                                      ? urlAvatar + applyPost.cv.user.image
-                                     : urlAvatar + 'default-avatar.png' }" />
+                                     : urlAvatar + 'default-avatar.png' }"  alt="avatar" />
                                 <div class="text pl-md-4">
                                     <H5 class="location mb-0" th:text="${applyPost.cv.user.fullName}"></H5>
                                     <p style="display: block;color: black" th:text="${applyPost.cv.user.address}"></p>

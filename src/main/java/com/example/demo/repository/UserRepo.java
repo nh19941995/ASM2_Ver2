@@ -12,5 +12,4 @@ import java.util.Set;
 
 public interface UserRepo extends JpaRepository<User, Long>, UserCustomRepo {
     Optional<User> findByUsername(String username);
-
 }

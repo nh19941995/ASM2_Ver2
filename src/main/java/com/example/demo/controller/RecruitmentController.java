@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.Optional;
 
 
 @Controller
@@ -32,7 +35,6 @@ public class RecruitmentController {
     private final UserService userService;
     private final AddAttributesToModel addAttributesToModel;
     private final CompanyService companyService;
-    private final CategoryService categoryService;
     private final ApplyPostService applyPostService;
     private final CommonAttributesPopulator commonAttributesPopulator;
 
@@ -51,7 +53,6 @@ public class RecruitmentController {
             UserService userService,
             AddAttributesToModel addAttributesToModel,
             CompanyService companyService,
-            CategoryService categoryService,
             ApplyPostService applyPostService,
             CommonAttributesPopulator commonAttributesPopulator
 
@@ -61,7 +62,6 @@ public class RecruitmentController {
         this.userService = userService;
         this.addAttributesToModel = addAttributesToModel;
         this.companyService = companyService;
-        this.categoryService = categoryService;
         this.applyPostService = applyPostService;
         this.commonAttributesPopulator = commonAttributesPopulator;
     }
@@ -104,14 +104,15 @@ public class RecruitmentController {
             @RequestParam(value = "size", defaultValue = "5") int size,
             @RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
             @RequestParam(value = "sortDirection", defaultValue = "asc") String sortDirection,
-            // xác thực người dùng
-            @AuthenticationPrincipal UserDetails userDetails
+            HttpSession session
     ) {
         Page<Recruitment> recruitments = recruitmentService.findAll(
                 new PaginationRequest(page, size, sortBy, sortDirection)
         );
-
         model.addAttribute("recruitments", recruitments);
+        // lưu url hiện tại vào session
+        String currentUrl = "/recruitment/all";
+        session.setAttribute("currentUrl", currentUrl);
         // Thêm các thuộc tính vào model
         return ViewConstants.POST_LIST_VIEW;
     }
@@ -142,54 +143,128 @@ public class RecruitmentController {
     }
 
     // gọi form cập nhật Recruitment
-    // http://localhost:8080/recruitment/update?recruitmentId=1&userId=2&companyId=5
+    // http://localhost:8080/recruitment/update?recruitmentId=1
     @GetMapping("/update")
     public String updateRecruitment(
             Model model,
             @RequestParam("recruitmentId") Long recruitmentId,
-            @RequestParam("userId") Long userId,
-            @RequestParam("companyId") Long companyId,
-            @AuthenticationPrincipal UserDetails userDetails
+            @AuthenticationPrincipal UserDetails userDetails,
+            RedirectAttributes redirectAttributes,
+            HttpSession session
     ) {
-        // Kiểm tra xem người dùng có tồn tại và có quyền truy cập không
-        userAccessChecker.checkUserAccess(userId, userDetails);
-        // Bắt đầu cập nhật Recruitment
-        Recruitment recruitment = recruitmentService.findById(recruitmentId)
-                .orElseThrow(() -> new ResourceNotFoundException("Recruitment not found"));
-        model.addAttribute("recruitment", recruitment);
-        addAttributesToModel.addType(model, "types");
-        addAttributesToModel.addCategory(model, "categories");
+        try {
+            // Lấy thông tin User hiện tại
+            User user = userService.findByUsername(userDetails.getUsername())
+                    .orElseThrow(() -> new AccessDeniedException("You do not have permission to access this action."));
+
+            // kiểm tra xem đã thêm thông tin company chưa
+            if (user.getCompany() == null){
+                throw new IllegalArgumentException("You need to add company information before posting recruitment.");
+            }
+
+            // Bắt đầu cập nhật Recruitment
+            Recruitment recruitment = companyService.isRecruitmentBelongsToCompany(user.getCompany().getId(),recruitmentId )
+                    .orElseThrow(() -> new AccessDeniedException("You do not have permission to access this action 2"));
+
+            // Thêm các thuộc tính vào model
+            model.addAttribute("recruitment", recruitment);
+            addAttributesToModel.addType(model, "types");
+            addAttributesToModel.addCategory(model, "categories");
+
+        }catch (Exception e){
+            // Xử lý ngoại lệ và thông báo
+            redirectAttributes.addFlashAttribute("messages", "Error: " + e.getMessage());
+            // lấy url từ session
+            String url = (String) session.getAttribute("currentUrl");
+            return "redirect:" + url;
+        }
         return ViewConstants.POST_JOB_VIEW;
     }
 
-    // thêm mới Recruitment hoặc cập nhật
-    // http://localhost:8080/recruitment/post?userId=2&companyId=5
-    @PostMapping("/post")
+    // lưu mới
+    // http://localhost:8080/recruitment/addNew?userId=2
+    @PostMapping("/addNew")
     public String postRecruitment(
             @Valid @ModelAttribute("recruitment") Recruitment recruitment,
             BindingResult bindingResult,
             Model model,
             @RequestParam("userId") Long userId,
-            @RequestParam("companyId") Long companyId,
             @AuthenticationPrincipal UserDetails userDetails,
             RedirectAttributes redirectAttributes
     ) {
-        // Kiểm tra xem người dùng có tồn tại và có quyền truy cập không
-        userAccessChecker.checkUserAccess(userId, userDetails);
+        try {
+            // Kiểm tra lỗi từ BindingResult
+            if (bindingResult.hasErrors()) {
+                addAttributesToModel.addType(model, "types");
+                addAttributesToModel.addCategory(model, "categories");
+                return ViewConstants.POST_JOB_VIEW;
+            }
 
-        if (bindingResult.hasErrors()) {
-            addAttributesToModel.addType(model, "types");
-            addAttributesToModel.addCategory(model, "categories");
-            return ViewConstants.POST_JOB_VIEW;
+            // Lấy thông tin User hiện tại
+            User user = userService.findByUsername(userDetails.getUsername())
+                    .orElseThrow(() -> new AccessDeniedException("You do not have permission to access this action"));
+
+            Company company = user.getCompany();
+            if (company == null){
+                throw new IllegalArgumentException("You need to add company information before posting recruitment.");
+            }
+            recruitment.setCompany(company);
+
+            // Lưu Recruitment
+            recruitmentService.save(recruitment);
+        } catch (Exception e) {
+            // Xử lý ngoại lệ và thông báo
+            redirectAttributes.addFlashAttribute("messages", "Error: " + e.getMessage());
+            return "redirect:/recruitment/all?userId=" + userId;
         }
-        Company company = new Company();
-        company.setId(companyId);
-        recruitment.setCompany(company);
-        recruitmentService.save(recruitment);
-        // Thông báo lên view
-        redirectAttributes.addFlashAttribute("messages", "Yêu cầu thành công !");
-        return "redirect:/recruitment/all?userId=" + userId + "&companyId=" + companyId;
+
+        // Thông báo thành công
+        redirectAttributes.addFlashAttribute("messages", "Yêu cầu thành công!");
+        return "redirect:/recruitment/all?userId=" + userId;
     }
+
+    // cập nhật Recruitment
+    // http://localhost:8080/recruitment/update?recruitmentId=1
+    @PostMapping("/update")
+    public String updateRecruitment(
+            @Valid @ModelAttribute("recruitment") Recruitment recruitment,
+            BindingResult bindingResult,
+            Model model,
+            @AuthenticationPrincipal UserDetails userDetails,
+            RedirectAttributes redirectAttributes
+    ) {
+        // Lấy thông tin User hiện tại
+        User user = userService.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new AccessDeniedException("You do not have permission to access this action"));
+        try {
+            // Kiểm tra lỗi từ BindingResult
+            if (bindingResult.hasErrors()) {
+                addAttributesToModel.addType(model, "types");
+                addAttributesToModel.addCategory(model, "categories");
+                return ViewConstants.POST_JOB_VIEW;
+            }
+
+            Company company = user.getCompany();
+            if (company == null){
+                throw new IllegalArgumentException("You need to add company information before posting recruitment.");
+            }
+            recruitment.setCompany(company);
+
+            // Lưu Recruitment
+            recruitmentService.save(recruitment);
+        } catch (Exception e) {
+            // Xử lý ngoại lệ và thông báo
+            redirectAttributes.addFlashAttribute("messages", "Error: " + e.getMessage());
+            return "redirect:/recruitment/all?userId=" + user.getId();
+        }
+
+        // Thông báo thành công
+        redirectAttributes.addFlashAttribute("messages", "Yêu cầu thành công!");
+        return "redirect:/recruitment/all?userId=" + user.getId();
+    }
+
+
+
 
     // xóa Recruitment
     // http://localhost:8080/recruitment/delete?recruitmentId=1&userId=2

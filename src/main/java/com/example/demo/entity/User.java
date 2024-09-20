@@ -102,7 +102,7 @@ public class User {
                     CascadeType.REFRESH,
                     CascadeType.DETACH
             },
-            fetch = FetchType.LAZY
+            fetch = FetchType.EAGER
     )
     @JoinColumn(name = "company_id")
     private Company company;

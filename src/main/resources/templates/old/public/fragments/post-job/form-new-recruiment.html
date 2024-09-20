@@ -8,7 +8,7 @@
     <p class="mt-5" sec:authorize="hasRole('USER')">Bạn cần đăng ký với tư cách nhà tuyển dụng để có thể đăng tuyển</p>
     <form
             th:if="${user != null && company != null}"
-            th:with="urlAddOrUpdate= @{/recruitment/post(userId=${user.id}, companyId=${company.id})}"
+            th:with="urlAddOrUpdate= @{/recruitment/addNew(userId=${user.id})}"
             th:action="${urlAddOrUpdate}"
             method="post"
             th:object="${recruitment}"
