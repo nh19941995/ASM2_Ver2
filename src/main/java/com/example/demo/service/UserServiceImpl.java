@@ -170,14 +170,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public String generateToken(String username) {
-        User user = userRepository.findByUsername(username).orElse(null);
-        if (user == null) {
-            return null;
-        }
-        String token = user.getUsername() + System.currentTimeMillis();
-        user.setToken(token);
-        userRepository.save(user);
-        return token;
+        return username + System.currentTimeMillis();
     }
 
     @Override

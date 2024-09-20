@@ -19,16 +19,21 @@ public class DataInitializer {
     private final UserService userService;
     private final TypeService typeService;
     private final CategoryService categoryService;
-    private final CvService cvService;
+    private final CompanyService companyService;
 
     @Autowired
-    public DataInitializer(RoleService roleService, StatusService statusService, UserService userService, TypeService typeService, CategoryService categoryService, CvService cvService) {
+    public DataInitializer(
+            RoleService roleService, StatusService statusService,
+            UserService userService, TypeService typeService,
+            CategoryService categoryService,
+            CompanyService companyService
+    ) {
         this.roleService = roleService;
         this.statusService = statusService;
         this.userService = userService;
         this.typeService = typeService;
         this.categoryService = categoryService;
-        this.cvService = cvService;
+        this.companyService = companyService;
     }
 
     @PostConstruct
@@ -167,6 +172,8 @@ public class DataInitializer {
 
 
         }
+
+
 
     }
 }

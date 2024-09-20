@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.config.EnumRole;
 import com.example.demo.service.*;
 import com.example.demo.service.email.EmailService;
 import com.example.demo.view.ViewConstants;
@@ -75,6 +76,20 @@ public class AuthController {
 
             user.setPassword(formattedEncodedPassword); // Lưu mật khẩu đã mã hóa vào user
             userService.save(user);
+            // nếu là manager thì gửi email xác thực
+//            if (user.getRole().getRoleName().equals(EnumRole.MANAGER.getName())) {
+//                // gửi email xác thực bất đồng bộ
+//                CompletableFuture.runAsync(() -> {
+//                    String token = userService.generateToken(user.getUsername());
+//                    user.setToken(token);
+//                    try {
+//                        emailService.sendEmailAuthentication(
+//                                user.getEmail(), user.getUsername(), token);
+//                    } catch (MessagingException e) {
+//                        logger.error("Không thể gửi email xác thực", e);
+//                    }
+//                });
+//            }
             // truyền message cho trang tiếp theo
             redirectAttributes.addFlashAttribute("message", "Đăng ký thành công!");
             // chuyển hướng đến trang đăng nhập
@@ -139,6 +154,7 @@ public class AuthController {
         CompletableFuture.runAsync(() -> {
             String token = userService.generateToken(user.getUsername());
             user.setToken(token);
+            userService.save(user);
             try {
                 emailService.sendEmailAuthentication(
                         user.getEmail(), user.getUsername(), token);
