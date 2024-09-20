@@ -89,7 +89,7 @@ public class FollowController {
 
     ) {
         userService.followCompany(userId, companyId);
-        redirectAttributes.addFlashAttribute("messages", "Theo dõi thành công !");
+        redirectAttributes.addFlashAttribute("messages", "Theo dõi công ty thành công !");
         // lấy url từ session
         String url = (String) session.getAttribute("currentUrl");
         return "redirect:" + url;
@@ -105,7 +105,7 @@ public class FollowController {
             HttpSession session
     ) {
         userService.unfollowCompany(userId, companyId);
-        redirectAttributes.addFlashAttribute("messages", "Bỏ theo dõi thành công !");
+        redirectAttributes.addFlashAttribute("messages", "Bỏ theo dõi công ty thành công !");
         // lấy url từ session
         String url = (String) session.getAttribute("currentUrl");
         return "redirect:" + url;
@@ -121,7 +121,7 @@ public class FollowController {
             HttpSession session
     ) {
         userService.followRecruiment(userid, recruitmentid);
-        redirectAttributes.addFlashAttribute("messages", "Theo dõi thành công !");
+        redirectAttributes.addFlashAttribute("messages", "Theo dõi bài đăng thành công !");
         // lấy url từ session
         String url = (String) session.getAttribute("currentUrl");
         return "redirect:" + url;
@@ -137,7 +137,7 @@ public class FollowController {
             HttpSession session
     ) {
         userService.unfollowfollowRecruiment(userId, recruitmentId);
-        redirectAttributes.addFlashAttribute("messages", "Bỏ theo dõi thành công !");
+        redirectAttributes.addFlashAttribute("messages", "Bỏ theo dõi bài đăng thành công !");
         // lấy url từ session
         String url = (String) session.getAttribute("currentUrl");
         return "redirect:" + url;
