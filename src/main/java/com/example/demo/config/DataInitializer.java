@@ -109,7 +109,7 @@ public class DataInitializer {
             );
 
             userService.addDataUser(
-                    "Pham Thi Dung", "phamthidung4",
+                    "Phạm Thị Dung", "phamthidung4",
                     "phamthidung4", "phamthidung4@gmail.com",
                     "Hai Phong", "0123456804",
                     "UI/UX Designer", 2L, 2L
@@ -123,14 +123,14 @@ public class DataInitializer {
             );
 
             userService.addDataUser(
-                    "Nguyen Thi Fung", "nguyenthifung6",
+                    "Nguyễn Thị Phùng", "nguyenthifung6",
                     "nguyenthifung6", "nguyenthifung6@gmail.com",
                     "Nha Trang", "0123456806",
                     "Marketing Specialist", 2L, 2L
             );
 
             userService.addDataUser(
-                    "Tran Van Giang", "tranvangiang7",
+                    "Trần Văn Giang", "tranvangiang7",
                     "tranvangiang7", "tranvangiang7@gmail.com",
                     "Vung Tau", "0123456807",
                     "Sales Representative", 1L, 1L
