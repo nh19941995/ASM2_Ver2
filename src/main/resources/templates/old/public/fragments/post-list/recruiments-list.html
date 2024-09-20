@@ -1,0 +1,130 @@
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
+>
+
+
+<div th:fragment="recruiments-list(recruitments)">
+    <section class="ftco-section bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 pr-lg-4">
+
+                        <div th:if="${recruitments.getContent().size() == 0} ">
+                            <p th:text="'Chưa có bài đăng nào được tạo'"></p>
+                        </div>
+
+                        <div class="row" th:if="${recruitments.getContent().size()}> 0">
+                            <!-- title-->
+                            <div sec:authorize="hasRole('MANAGER')" class="col-md-12 ">
+                                <div class="row form-group">
+                                    <div class="col-md-12">
+                                        <label>Danh sách bài tuyển dụng </label> <br>
+
+                                        <a th:if="${user != null}"
+                                           th:href="@{/recruitment/addNew(userId=${user.id})}"
+                                           class="btn px-4 btn-primary text-white">Đăng tuyển</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end title-->
+
+                            <!--  recruiments list-->
+                            <th:block th:if="${recruitments.getContent().size() > 0}"
+                                      th:each="recruitment : ${recruitments}"
+                            >
+                                <div class="col-md-12 ">
+                                    <div class="job-post-item p-4 d-block d-lg-flex align-items-center">
+                                        <div class="one-third mb-4 mb-md-0">
+                                            <div class="job-post-item-header align-items-center">
+                                                <span class="subadge" th:text="${recruitment.type.name}"></span>
+                                                <h2 class="mr-3 text-black">
+                                                    <a th:text="${recruitment.title}"
+                                                       th:href="@{/recruitment/detail(recruitmentId=${recruitment.id},userId=${user.id},companyId=${recruitment.company.id})}"
+                                                    ></a>
+                                                </h2>
+                                            </div>
+                                            <div class="job-post-item-body d-block d-md-flex">
+                                                <div class="mr-3"><span class="icon-layers"></span>
+                                                    <a href="#" th:text="${recruitment.Company.nameCompany}"></a>
+                                                </div>
+                                                <div><span class="icon-my_location"></span>
+                                                    <span th:text="${recruitment.address}"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div th:with="urlUpdate= @{/recruitment/update(userId=${user.id}, companyId=${recruitment.company.id},recruitmentId=${recruitment.id})},
+                                              urlDelete= @{/recruitment/delete(userId=${user.id}, companyId=${recruitment.company.id},recruitmentId=${recruitment.id})}"
+                                             class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0"
+                                             style="width: 400px !important;">
+<!--                                            <div>-->
+<!--                                                <a href="#"-->
+<!--                                                   class="icon text-center d-flex justify-content-center align-items-center icon mr-2">-->
+<!--                                                    <span class="icon-heart"></span>-->
+<!--                                                </a>-->
+<!--                                            </div>-->
+                                            <!--     Button trigger modal detail -->
+                                            <!--                                        <button type="button" class="btn btn-primary py-2 ml-2" data-toggle="modal"-->
+                                            <!--                                                th:attr="data-target=@{#inforModal{id}(id=${recruitment.id})}"-->
+                                            <!--                                        >Xem chi tiết </button>-->
+                                            <!-- End Button trigger modal detail-->
+
+                                            <a type="button" class="btn btn-primary py-2 ml-2"
+                                               th:href="@{/recruitment/detail(recruitmentId=${recruitment.id},userId=${user.id},companyId=${recruitment.company.id})}"
+                                            >Xem chi tiết </a>
+
+                                            <a th:href="${urlUpdate}"
+                                               class="btn btn-warning py-2 ml-2">Cập nhật</a>
+
+                                            <!-- Button trigger modal delete-->
+                                            <button type="button" class="btn btn-danger py-2 ml-2" data-toggle="modal"
+                                                    th:attr="data-target=@{#deleteModal{id}(id=${recruitment.id})}"
+                                            >Xóa
+                                            </button>
+                                            <!-- End Button trigger modal delete-->
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- modal detail-->
+                                <!--                            <th:block-->
+                                <!--                                    th:insert="~{old/public/fragments/post-list/modal/moda-detail.html::detail(${recruitment})} ">-->
+                                <!--                            </th:block>-->
+                                <!-- end modal detail-->
+
+
+                                <!-- modal delete-->
+                                <th:block
+                                        th:with="userId=${param.userId}"
+                                        th:insert="~{old/public/fragments/post-list/modal/modal-delete.html::delete(${recruitment},${userId},${recruitment.company.id})} ">
+                                </th:block>
+                                <!-- end modal delete-->
+
+                            </th:block>
+                            <!-- end recruiments list-->
+
+                        </div>
+
+                    <!--pagination-->
+                    <div class="row mt-5">
+                        <div class="col text-center">
+                            <div    th:with="paramUrl=${'&companyId=' + param.companyId + '&userId=' + user.id}"
+                                    class="d-flex justify-content-center align-items-center">
+                                <th:block
+                                        th:insert="~{old/public/fragments/test/page-item.html::page-item(3,'/recruitment/all',${paramUrl},${recruitments}) } ">
+                                </th:block>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end pagination-->
+
+                </div>
+
+            </div>
+        </div>
+
+    </section>
+</div>
+</html>
+

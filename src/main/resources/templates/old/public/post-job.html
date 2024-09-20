@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" >
+<head>
+    <title>Creat a post</title>
+    <th:block th:insert="old/public/fragments/html_head::html_head"></th:block>
+</head>
+
+<body>
+
+<!--navigation bar-->
+<nav>
+    <th:block th:insert="~{old/public/fragments/nav/html_nav.html::html_nav } "></th:block>
+</nav>
+<!--end navigation bar-->
+
+<!--basic hero-->
+<nav>
+    <th:block th:insert="~{old/public/fragments/html_basic_hero.html::html_basic_hero('Đăng bài tuyển dụng', 'Đăng bài','/images/bg_1.jpg') } "></th:block>
+</nav>
+<!--end basic hero-->
+
+<!--thông báo-->
+<div th:if="${messages}" class="toast" data-delay="2500"
+     style="
+     /*position:fixed;*/
+     /*top: 100px;*/
+     /*right: 10px;*/
+     /*z-index: 2000;*/
+     /*width: 300px;*/
+     /*padding-bottom: 10px;*/
+">
+    <script th:inline="javascript">
+        swal({
+            title: /*[[${messages}]]*/,
+            // text: "That thing is still around?",
+            // icon: 'success',
+            timer: 1500,
+            // buttons: true,
+            type: 'success'
+        });
+    </script>
+</div>
+<!--end thông báo-->
+
+<!-- breadcrumbs -->
+<section class="section-hero overlay inner-page bg-image" style="background-image: url('images/hero_1.jpg');" id="home-section" >
+    <div class="container">
+        <div class="row">
+            <div class="col-md-7">
+                <h1 class="text-white font-weight-bold">Đăng bài</h1>
+                <div class="custom-breadcrumbs">
+                    <a href="#">Trang chủ</a> <span class="mx-2 slash">/</span>
+                    <span ><strong>Đăng bài tuyển dụng</strong></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- end breadcrumbs -->
+
+<section class="site-section" >
+    <div class="container">
+        <!--form add new recruiment-->
+        <div>
+            <th:block th:insert="~{old/public/fragments/post-job/form-new-recruiment.html :: add-new-recruiment} "></th:block>
+        </div>
+        <!--end form add new recruiment-->
+    </div>
+</section>
+
+<!--footer-->
+<div>
+    <th:block th:insert="old/public/footer.html::footer"></th:block>
+</div>
+<!--end footer-->
+</body>
+</html>

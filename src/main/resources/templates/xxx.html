@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>luv2code System Home Page</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<h1>System Meeting</h1>
+
+<h1><span sec:authentication="principal.authorities"></span></h1>
+
+<h2>luv2code system Home Page</h2>
+<hr>
+<p>
+    See you in Brazil ... for our annual Leadership retreat! <br>
+    Keep this trip a secret, don't tell the regular employees LOL :-)
+</p>
+
+<div>
+    <hr>
+    <h1>top</h1>
+    <ul>
+        <li th:each="category : ${categories}" th:text="${category != null} ? ${category} : 'N/A'">
+        </li>
+    </ul>
+    <hr>
+
+
+    <h1>all</h1>
+
+    <div th:each="a : ${categories}" class="container mt-5">
+        <div class="mb-4">
+            <h1 th:text="${a != null} ? 'ID: ' + ${a.getId()} + ' - Ngôn ngữ: ' + ${a.getName()} : 'N/A'"></h1>
+        </div>
+        <table class="table table-striped table-bordered">
+            <thead class="thead-dark">
+            <tr>
+                <th>ID công ty</th>
+                <th>Tên công ty</th>
+                <th>Số lượng tuyển</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="x : ${a.recruitment}">
+                <td th:text="${x.getCompany().getId()}"></td>
+                <td th:text="${x.getCompany().getNameCompany()}"></td>
+                <td th:text="${x.quantity}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+
+</div>
+
+
+
+</body>
+
+<a th:href="@{/}">Back to Home Page</a>
+
+</html>

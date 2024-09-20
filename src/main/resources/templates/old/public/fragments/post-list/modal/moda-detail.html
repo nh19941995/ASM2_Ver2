@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Website</title>
+</head>
+<body>
+
+<!-- Fragment định nghĩa tiêu đề -->
+<div th:fragment="titleFragment(content, label, id)" class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <label th:for="${id}" th:text="${label} + ':'"></label>
+        </div>
+        <div class="col">
+            <p th:id="${id}" th:text="${content}"></p>
+        </div>
+    </div>
+</div>
+
+<!-- Fragment để hiển thị chi tiết -->
+<div th:fragment="detail(recruitment)">
+    <!-- Modal cho chi tiết -->
+    <div
+            th:attr="id=@{inforModal{id}(id=${recruitment.id})}"
+            class="modal fade"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+    >
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel" th:text="${recruitment.title}">Recruitment details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Các fragment tiêu đề -->
+                    <div th:replace="this :: titleFragment(${recruitment.description != null ? recruitment.description : 'N/A'}, 'Mô tả công việc', 'description')"></div>
+                    <div th:replace="this :: titleFragment(${recruitment.experience != null ? recruitment.experience : 'N/A'}, 'Kinh nghiệm', 'experience')"></div>
+                    <div th:replace="this :: titleFragment(${recruitment.quantity != null ? recruitment.quantity : 'N/A'}, 'Số người cần tuyển', 'quantity')"></div>
+                    <div th:replace="this :: titleFragment(${recruitment.address != null ? recruitment.address : 'N/A'}, 'Địa chỉ', 'address')"></div>
+                    <div th:replace="this :: titleFragment(${recruitment.deadline != null ? recruitment.deadline : 'N/A'}, 'Hạn ứng tuyển', 'deadline')"></div>
+                    <div th:replace="this :: titleFragment(${recruitment.salary != null ? recruitment.salary : 'N/A'}, 'Mức lương', 'salary')"></div>
+                    <div th:replace="this :: titleFragment(${recruitment.type != null ? recruitment.type.name : 'N/A'}, 'Loại công việc', 'type')"></div>
+                    <div th:replace="this :: titleFragment(${recruitment.category != null ? recruitment.category.name : 'N/A'}, 'Danh mục công việc', 'category')"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,138 @@
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<body>
+<div
+        th:fragment="add-new-recruiment"
+>
+    <p class="mt-5" sec:authorize="hasRole('MANAGER')" th:if="${company == null}">Bạn cần thêm thông tin công ty trước khi tạo thông tin tuyển dụng</p>
+    <p class="mt-5" sec:authorize="hasRole('USER')">Bạn cần đăng ký với tư cách nhà tuyển dụng để có thể đăng tuyển</p>
+    <form
+            th:if="${user != null && company != null}"
+            th:with="urlAddOrUpdate= @{/recruitment/post(userId=${user.id}, companyId=${company.id})}"
+            th:action="${urlAddOrUpdate}"
+            method="post"
+            th:object="${recruitment}"
+    >
+        <input type="hidden" th:field="${recruitment.id}"/>
+        <div class="row align-items-center mb-5">
+            <div class="col-lg-8 mb-4 mb-lg-0">
+                <div class="d-flex align-items-center">
+                    <div>
+                        <h2>Đăng bài</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="row">
+                    <div class="col-6">
+                        <a href="#" class=""></a>
+                    </div>
+                    <div class="col-6">
+                        <button type="submit" class="btn btn-block btn-primary btn-md">Đăng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-5">
+            <div class="col-lg-12">
+                <div class="p-4 p-md-5 border rounded">
+                    <h3 class="text-black mb-5 border-bottom pb-2">Chi tiết bài tuyển dụng</h3>
+
+
+                    <div class="form-group">
+                        <label for="title">Tiêu đề</label>
+                        <input
+                                type="text" class="form-control" required id="title" name="title"
+                                th:field="${recruitment.title}" placeholder="Tiêu đề"
+                        >
+                        <div th:if="${#fields.hasErrors('title')}" th:errors="${recruitment.title}" class="text-danger"></div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="description">Mô tả công việc</label>
+                        <input
+                                type="text" class="form-control" required id="description" name="description"
+                                th:field="${recruitment.description}" placeholder="Mô tả công việc"
+                        >
+                        <div th:if="${#fields.hasErrors('description')}" th:errors="${recruitment.description}"
+                             class="text-danger"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="experience">Kinh nghiệm</label>
+                        <input
+                                type="text" class="form-control" required id="experience" name="experience"
+                                th:field="${recruitment.experience}" placeholder="Kinh nghiệm"
+                        >
+                        <div th:if="${#fields.hasErrors('experience')}" th:errors="${recruitment.experience}"
+                             class="text-danger"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="quantity">Số người cần tuyển</label>
+                        <input
+                                type="number" class="form-control" required id="quantity" name="quantity"
+                                th:field="${recruitment.quantity}" placeholder="Số người cần tuyển"
+                        >
+                        <div th:if="${#fields.hasErrors('quantity')}" th:errors="${recruitment.quantity}" class="text-danger"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address">Địa chỉ</label>
+                        <input
+                                type="text" class="form-control" id="address" name="address"
+                                th:field="${recruitment.address}" placeholder="Địa chỉ"
+                        >
+                        <div th:if="${#fields.hasErrors('address')}" th:errors="${recruitment.address}" class="text-danger"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="deadline">Hạn ứng tuyển</label>
+                        <input
+                                type="date"
+                                class="form-control"
+                                required
+                                id="deadline"
+                                name="deadline"
+                                th:value="${#temporals.format(recruitment.deadline, 'yyyy-MM-dd')}"
+                                placeholder="Hạn ứng tuyển"
+                        >
+                        <div th:if="${#fields.hasErrors('deadline')}" th:errors="${recruitment.deadline}" class="text-danger"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="salary">Mức lương</label>
+                        <input
+                                type="text" class="form-control" required id="salary" name="salary"
+                                th:field="${recruitment.salary}" placeholder="Mức lương"
+                        >
+                        <div th:if="${#fields.hasErrors('salary')}" th:errors="${recruitment.salary}" class="text-danger"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="type" class="form-label">Loại công việc:</label>
+                        <select id="type" th:field="*{type.id}" class="form-control"
+                                aria-label="Default select example">
+                            <option th:each="type : ${types}" th:value="${type.id}" th:text="${type.name}"></option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category" class="form-label">Danh mục công việc:</label>
+                        <select id="category" th:field="*{category.id}" class="form-control"
+                                aria-label="Default select example">
+                            <option th:each="c : ${categories}" th:value="${c.id}" th:text="${c.name}"></option>
+                        </select>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </form>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>luv2code System Home Page</title>
+</head>
+<body>
+
+<h1>System Meeting</h1>
+
+<h1><span sec:authentication="principal.authorities"></span></h1>
+
+<h2>luv2code system Home Page</h2>
+<hr>
+<p>
+    See you in Brazil ... for our annual Leadership retreat! <br>
+    Keep this trip a secret, don't tell the regular employees LOL :-)
+</p>
+</body>
+
+<a th:href="@{/}">Back to Home Page</a>
+
+</html>

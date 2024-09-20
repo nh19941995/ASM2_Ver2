@@ -1,0 +1,142 @@
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="html_profile_formUpdateCompany">
+
+
+  <form
+          th:action="'/company/updateInormation'"
+          th:object="${company}"
+          method="post"
+          th:attr="enctype='multipart/form-data'"
+  >
+    <div class="row mb-5">
+      <div class="col-lg-12">
+        <div class="p-4 p-md-5 border rounded" >
+          <input type="hidden" th:field="${company.id}"/>
+
+          <div class="row">
+            <div class="col-xs-12 col-md-6">
+              <label class="btn btn-primary btn-md btn-file">
+                Chọn Logo <input type="file" required name="file" id="cvfile" hidden>
+              </label>
+            </div>
+
+            <div class="col-xs-12 col-md-6">
+              <div class="row ">
+                <div class="col-xs-12">
+                  <span class="text-warning" id="tempCVFile" ></span>
+                </div>
+              </div>
+              <div class="row">
+                <div
+                        class="col-xs-12"
+                        style="margin-left: 0"
+                        id="divImag1"
+                        th:if="${company.logo != null}"
+                >
+                  <img
+                          id="avatar"
+                          height="100"
+                          width="100"
+                          style="border-radius: 50px; margin-bottom: 15px"
+                          th:src="@{'http://localhost:8080/logo/' + ${company.logo}}"
+                          alt="Logo của công ty"
+                  >
+                </div>
+                <div class="col-xs-12">
+                  <span class="text-success" th:if="${cv.id != null}" th:text="${cv.fileName}"></span>
+                  <span th:if="${company.logo == null}" th:text="'Bạn chưa thêm Logo'"></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-xs-12 col-md-3">
+              <a id="nameCv" th:if="${cv.id != null}" th:href="@{'/files/cv/' + ${cv.fileName}}">Xem CV</a>
+              <a style="color: red; margin-left: 20px;" th:if="${cv.id != null}" data-toggle="modal" data-target="#exampleModal">Xóa CV</a>
+            </div>
+          </div>
+
+          <input type="hidden" name="user.id" th:value="${user.id}"/>
+
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input
+                    type="text"
+                    class="form-control"
+                    required
+                    id="email"
+                    name="email"
+                    th:field="${company.email}"
+                    placeholder="you@yourdomain.com"
+            >
+            <div th:if="${#fields.hasErrors('email')}" th:errors="${company.email}" class="text-danger"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="job-title">Tên công ty</label>
+            <input
+                    type="text"
+                    class="form-control"
+                    name="nameCompany"
+                    th:field="${company.nameCompany}"
+                    id="job-title"
+                    placeholder="Full name"
+                    required
+            >
+            <div th:if="${#fields.hasErrors('nameCompany')}" th:errors="${company.nameCompany}" class="text-danger"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="job-location">Địa chỉ</label>
+            <input
+                    type="text"
+                    name="address"
+                    th:field="${company.address}"
+                    required
+                    class="form-control"
+                    id="job-location"
+                    placeholder="e.g. New York"
+            >
+            <div th:if="${#fields.hasErrors('address')}" th:errors="${company.address}" class="text-danger"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="job-phone">Số điện thoại công ty</label>
+            <input
+                    type="text"
+                    name="phoneNumber"
+                    th:field="${company.phoneNumber}"
+                    required
+                    class="form-control"
+                    id="job-phone"
+                    placeholder="+ 84"
+            >
+            <div th:if="${#fields.hasErrors('phoneNumber')}" th:errors="${company.phoneNumber}" class="text-danger"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="editor">Mô tả công ty</label>
+            <textarea
+                    name="description"
+                    th:field="${company.description}"
+                    class="form-control"
+                    id="editor"
+                    placeholder="Mô tả"
+            ></textarea>
+            <div th:if="${#fields.hasErrors('description')}" th:errors="${company.description}" class="text-danger"></div>
+          </div>
+
+          <div class="row form-group" >
+            <div class="col-md-12">
+              <input
+                      type="submit"
+                      value="Lưu thông tin"
+                      class="btn px-4 btn-primary text-white"
+              >
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

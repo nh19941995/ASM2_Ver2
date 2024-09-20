@@ -1,0 +1,108 @@
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+
+<!--pageRange : số phân trang sẽ hiển thị cho người dùng chuyển hướng -->
+<!--baseUrl : đường dẫn cơ bản của trang web-->
+<!--paramUrl : các tham số truyền vào url -->
+<!--objectPage : đối tượng Page của Spring Data JPA-->
+
+<div th:fragment="page-item(pageRange,baseUrl,paramUrl,objectPage)">
+    <nav    th:if="${objectPage.totalPages > 0}"
+            aria-label="Page navigation example"
+            th:with="currentPage=${objectPage.number + 1},
+            nextPage=${currentPage + 1},
+            previousPage=${currentPage - 1},
+            totalPages=${objectPage.totalPages},
+            start=${ (currentPage<pageRange)?1:(currentPage/pageRange)*pageRange},
+            end=${(totalPages < start + pageRange) ? totalPages : start + pageRange -1},
+
+            nextUrl=@{${baseUrl}(page=${nextPage - 1}, size=${objectPage.size})},
+            nextUrlWithParam=@{${nextUrl}+${paramUrl}},
+
+            previousUrl=@{${baseUrl}(page=${previousPage - 1}, size=${objectPage.size})},
+            previousUrlWithParam=@{${previousUrl}+${paramUrl}},
+
+            curentUrl=@{${baseUrl}(page=${currentPage - 1}, size=${objectPage.size})},
+            curentUrlWithParam=@{${curentUrl}+${paramUrl}}"
+    >
+        <ul class="pagination">
+            <!-- Nút Previous -->
+            <li th:classappend="${previousPage != 0} ? 'page-item' : 'page-item disabled'">
+                <!-- Kiểm tra xem có trang trước đó và nó có được phân trang hay không -->
+                <a class="page-link"
+                   th:href="${previousPage != 0} ? ${previousUrlWithParam} : '#'"
+                   aria-label="Previous"
+                   style="
+                    text-align: center;
+                    display: inline-block;
+                    width: 40px;
+                    border-radius: 50%;"
+                >
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                </a>
+            </li>
+            <p th:if="${start} > ${pageRange - 1}"
+               class="page-link"
+               style="
+                      text-align: center;
+                      display: inline-block;
+                      width: 40px;
+                      border-radius: 50%;"
+            >...</p>
+            <!-- Các nút số trang -->
+            <!-- hàm sequence() của Thymeleaf để tạo ra một dãy số từ 1 đến tổng số trang (totalPages)-->
+            <li th:each="pageNum : ${#numbers.sequence(((end == totalPages && totalPages > pageRange)? end - pageRange + 1 : start), end)}"
+                th:classappend="${pageNum == currentPage} ? 'page-item active' : 'page-item'">
+                <div>
+                    <th:block th:insert="~{old/public/fragments/test/page-item.html::currentUrl(${pageNum},${objectPage.size},${paramUrl},${baseUrl}) } "></th:block>
+                </div>
+            </li>
+            <p th:if="${end} < ${totalPages}"
+               class="page-link"
+               style="
+                    text-align: center;
+                    display: inline-block;
+                    width: 40px;
+                    border-radius: 50%;"
+            >...</p>
+
+            <!-- Nút Next -->
+            <li th:classappend="${totalPages > (nextPage - 1) } ? 'page-item' : 'page-item disabled'">
+                <!-- lấy ra số của trang sau -->
+                <a class="page-link"
+                   th:href="${totalPages > (nextPage - 1)} ? ${nextUrlWithParam} : '#'"
+                   aria-label="Next"
+                   style="
+                    text-align: center;
+                    display: inline-block;
+                    width: 40px;
+                    border-radius: 50%;"
+                >
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+
+<div th:fragment="currentUrl(x,y,z,a)">
+    <div th:with="
+        curentUrl=@{${a}(page=${x - 1}, size=${y})},
+        curentUrlWithParam=@{${curentUrl} + ${z}
+    }">
+        <a
+                class="page-link"
+                th:href="${curentUrlWithParam}"
+                th:text="${x}"
+                style="
+                    text-align: center;
+                    display: inline-block;
+                    width: 40px;
+                    border-radius: 50%;"
+        ></a>
+    </div>
+</div>
+
+</html>

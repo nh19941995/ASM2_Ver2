@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Login and register</title>
+    <th:block th:insert="old/public/fragments/html_head::html_head"></th:block>
+</head>
+
+<body>
+<!--navigation bar-->
+<nav>
+    <th:block th:insert="~{old/public/fragments/nav/html_nav.html::html_nav } "></th:block>
+</nav>
+<!--end navigation bar-->
+
+<!--notice-->
+<div th:if="${success}" class="toast" data-delay="2000"
+     style="position:fixed;top: 100PX; right: 10PX;z-index: 2000;width: 300px">
+    <script>
+        swal({
+            title: 'Ứng cử viên này chưa cập nhật cv!',
+            /* text: 'Redirecting...', */
+            icon: 'error',
+            timer: 3000,
+            buttons: true,
+            type: 'error'
+        })
+    </script>
+</div>
+<!--end notice-->
+
+<!--basic hero-->
+<nav>
+    <!--Danh sách ứng cử viên->Công việc-->
+    <th:block
+            th:insert="~{old/public/fragments/html_basic_hero.html::html_basic_hero('Danh sách ứng cử viên', 'Công việc','/images/bg_1.jpg') } ">
+    </th:block>
+</nav>
+<!--end basic hero-->
+
+
+<section class="ftco-section bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 pr-lg-5">
+                <div class="row">
+                    <th:block th:each="applyPost : ${applyPosts.content}">
+                        <div class="col-md-12" style="box-shadow: rgba(0, 0, 0, 0.4) 0px 0px 10px;margin: 20px auto;">
+                            <div class="team d-md-flex p-4 bg-white">
+                                <img th:with="urlAvatar=${'http://localhost:8080/files/avatar/'}"
+                                     style="margin-top: 10px" class="img"
+                                     th:src="${applyPost.cv.user.image != null
+                                     ? urlAvatar + applyPost.cv.user.image
+                                     : urlAvatar + 'default-avatar.png'}"
+                                />
+                                <div class="text pl-md-4">
+                                    <H5 class="location mb-0" th:text="${applyPost.cv.user.fullName + ' - ' + applyPost.recruitment.title }"></H5>
+                                    <p style="display: block;color: black" th:text="${applyPost.cv.user.address}"></p>
+                                    <span class="position" style="display: block;color: black"
+                                          th:text="${applyPost.cv.user.email}"></span>
+                                    <p class="mb-4" style="width: 700px" th:utext="${applyPost.cv.user.description}">
+                                        .</p>
+                                    <div
+                                            th:with="urlCv=${'http://localhost:8080/files/cv/'}"
+                                            th:if="${applyPost.cv != null}" style="margin-left: 1px" class="row">
+                                        <p><a
+                                                th:href="${urlCv+ applyPost.cv.fileName}"
+                                                class="btn btn-primary"
+                                        >Xem cv</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                    <div style="text-align: center" th:if="${applyPosts.totalPages == 0}">
+                        <p style="color: red">Không có kết quả nào</p>
+                    </div>
+
+                    <!-- pagination -->
+                    <div sec:authorize="isAuthenticated()" class="row mt-5">
+                        <div class="col text-center">
+                            <div
+                                    th:with="paramUrl=${'&companyId='+company.id+'&userId='+user.id}"
+                                    class="d-flex justify-content-center align-items-center"
+                            >
+                                <th:block
+                                        th:insert="~{old/public/fragments/test/page-item.html :: page-item(3, '/apply/all',${paramUrl}, ${applyPosts})}">
+                                </th:block>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end pagination -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<!--footer-->
+<div>
+    <th:block th:insert="old/public/footer.html::footer"></th:block>
+</div>
+<!--end footer-->
+
+</body>
+</html>

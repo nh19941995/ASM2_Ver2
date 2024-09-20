@@ -1,0 +1,66 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      lang="vi"
+>
+
+<div th:fragment="moda-apply(recruitment)">
+    <div
+            th:attr="id=@{applyModal{id}(id=${recruitment.id})}"
+            class="modal fade"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+    >
+        <div sec:authorize="isAuthenticated()" class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form
+                        th:id="${'chose'+recruitment.id}"
+                        th:action="@{/apply/applyWithOldCv}"
+                        method="post"
+                        enctype="application/x-www-form-urlencoded"
+                >
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel" th:text="${recruitment.title}"
+                        >Recruitment details</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row form-group col-md-12 mb-3 mb-md-0">
+                            <input type="hidden" name="recruitmentId" th:value="${recruitment.id}"/>
+                            <input type="hidden" name="userId" th:value="${user.id}"/>
+                            <div class="col-12 form-group">
+                                <select class="col-12 form-select"
+                                        th:id="${'chose_'+recruitment.id}"
+                                        th:attr="onchange='toggleFileUpload('+${recruitment.id}+')'">
+                                    <option value="existing" th:text="'Dùng CV đã đăng'">1</option>
+                                    <option value="new" th:text="'Tải lên CV mới'">2</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12 form-group" style="display: none;"
+                                 th:id="'fileUpload_'+${recruitment.id}"
+                            >
+                                <label th:for="'file_'+${recruitment.id}">Chọn file:</label>
+                                <input type="file" th:id="'file_'+${recruitment.id}" name="file" class="form-control"/>
+                            </div>
+
+                            <div class="col-12 form-group">
+                                <label th:for="'message'+${recruitment.id}">Giới thiệu:</label>
+                                <textarea th:id="'content'+${recruitment.id}" name="message" class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Apply</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</html>

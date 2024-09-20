@@ -1,0 +1,88 @@
+<!-- public/fragments/html_head.html -->
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<div th:fragment="html_nav">
+    <!--    modal_login-->
+    <div>
+        <th:block th:insert="~{old/public/fragments/nav/modal/modal_login.html::modal_login}"></th:block>
+    </div>
+
+
+    <div class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+        <div class="container-fluid px-md-4	">
+            <a class="navbar-brand" href="/templates/old/public">Work CV</a>
+            <div class="collapse navbar-collapse" id="ftco-nav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a href="/" class="nav-link">Trang chủ</a></li>
+                    <li class="nav-item"><a th:href="@{/recruitment/all}" class="nav-link">Công việc</a></li>
+                    <li class="nav-item"><a href="/templates/old/public" class="nav-link">Ứng cử viên</a></li>
+                    <li sec:authorize="hasRole('MANAGER')" class="nav-item">
+                        <a
+                                sec:authorize="isAuthenticated()"
+                                th:href="@{/recruitment/addNew(userId=${user.id})}"
+                                class="nav-link"
+                        >Đăng tuyển</a>
+                    </li>
+                    <!-- nếu đã đăng nhập -->
+                    <li sec:authorize="isAuthenticated()" class="nav-item">
+                        <a
+                                th:href="@{'/user/profile/'+${#authentication.name}}"
+                                th:text="${#authentication.principal.username}"
+                                class="nav-link"
+                                style="min-width: 75px;"
+                        ></a>
+
+                        <ul class="dropdown">
+                            <li>
+                                <a th:if="${user != null}" th:href="@{/user/update(id=${user.id})}">Hồ Sơ</a>
+                            </li>
+
+                            <li sec:authorize="hasRole('USER')"><a th:href="@{/follow/listFollowedRecruiment(userId=${user.id})}">Công việc đã theo dõi</a></li>
+
+                            <li sec:authorize="hasRole('MANAGER')">
+                                <div>
+                                    <p class="p-3" th:if="${company==null}" th:utext="'Bạn cần thêm thông tin <br/>công ty để dùng được đầy đủ <br/> chức năng vui lòng cung cấp thông tin!'"></p>
+                                </div>
+                                <a th:if="${company?.id != null and user?.id != null}"
+
+                                   th:href="@{/recruitment/allByCompany(companyId=${company.id},userId=${user.id},size=5,page=0)}">
+                                    Danh sách bài đăng
+                                </a>
+                            </li>
+
+                            <li sec:authorize="hasRole('USER')"><a th:href="@{/apply/allPostApply(userId=${user.id})}">Công việc đã ứng tuyển</a></li>
+                            <li sec:authorize="hasRole('USER')"><a th:href="@{/follow/listFollowedCompanies(userId=${user.id})}"> Công ty đã theo dõi</a></li>
+                            <li  sec:authorize="hasRole('MANAGER')" >
+                                <a th:if="${company?.id != null and user?.id != null}" th:href="@{/apply/all(companyId=${company.id}, userId=${user.id})}">Ứng cử viên tiềm năng</a>
+                            </li>
+                        </ul>
+                    </li>
+
+
+
+                    <li class="nav-item">
+                        <a
+                                sec:authorize="isAuthenticated()"
+                                th:href="@{/auth/logout}"
+                                class="nav-link"
+                        >Đăng xuất</a>
+                    </li>
+
+                    <!-- nếu chưa đăng nhập -->
+                    <li sec:authorize="!isAuthenticated()" class="nav-item">
+                        <!-- Button trigger modal -->
+                        <a type="button" class="nav-link" data-toggle="modal" data-target="#exampleModal-login">
+                            Đăng nhập
+                        </a>
+                    </li>
+
+                    <li sec:authorize="!isAuthenticated()" class="nav-item">
+                        <a type="button" href="/auth/showMyLoginPage" class="nav-link">Đăng ký</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</html>

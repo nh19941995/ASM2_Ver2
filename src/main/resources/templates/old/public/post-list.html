@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Login and register</title>
+    <th:block th:insert="old/public/fragments/html_head::html_head"></th:block>
+</head>
+<body>
+
+<!--navigation bar-->
+<nav>
+    <th:block th:insert="~{old/public/fragments/nav/html_nav.html::html_nav } "></th:block>
+</nav>
+<!--end navigation bar-->
+
+<!--basic hero-->
+<nav>
+    <th:block
+            th:insert="~{old/public/fragments/html_basic_hero.html::html_basic_hero('Danh sách bài đăng', 'Danh sách','/images/bg_1.jpg') } ">
+    </th:block>
+</nav>
+<!--end basic hero-->
+
+<!--notice-->
+<div th:if="${messages}" class="toast" data-delay="2500"
+     style="
+     /*position:fixed;*/
+     /*top: 100px;*/
+     /*right: 10px;*/
+     /*z-index: 2000;*/
+     /*width: 300px;*/
+     /*padding-bottom: 10px;*/
+">
+    <script th:inline="javascript">
+        swal({
+            title: /*[[${messages}]]*/,
+            // text: "That thing is still around?",
+            // icon: 'success',
+            timer: 1500,
+            // buttons: true,
+            type: 'success'
+        });
+    </script>
+</div>
+
+<div th:if="${error}" class="toast" data-delay="2500"
+     style="position:fixed; top: 100PX; left: 10PX;z-index: 2000;width: 300px">
+    <script>
+        swal({
+            title: 'Bài đăng đang có người ứng tuyển!',
+            /* text: 'Redirecting...', */
+            icon: 'error',
+            timer: 3000,
+            buttons: true,
+            type: 'error'
+        })
+    </script>
+</div>
+<!--end notice-->
+
+<!--recruitments list-->
+<div >
+    <th:block th:insert="old/public/fragments/post-list/recruiments-list.html::recruiments-list(${recruitments})"></th:block>
+</div>
+<!--end recruitments list-->
+
+<!--footer-->
+<div>
+    <th:block th:insert="old/public/footer.html::footer"></th:block>
+</div>
+<!--end footer-->
+</body>
+</html>

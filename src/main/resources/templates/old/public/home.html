@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      lang="vi"
+>
+
+<head>
+    <title>Work Cv</title>
+    <th:block th:insert="old/public/fragments/html_head::html_head"></th:block>
+</head>
+
+<body>
+
+<!--navigation bar-->
+<nav>
+    <th:block th:insert="old/public/fragments/nav/html_nav.html::html_nav"></th:block>
+</nav>
+<!-- end navigation bar -->
+
+<!--thông báo-->
+<div th:if="${messages}" class="toast" data-delay="2500"
+     style="
+     /*position:fixed;*/
+     /*top: 100px;*/
+     /*right: 10px;*/
+     /*z-index: 2000;*/
+     /*width: 300px;*/
+     /*padding-bottom: 10px;*/
+">
+    <script th:inline="javascript">
+        swal({
+            title: /*[[${messages}]]*/,
+            // text: "That thing is still around?",
+            // icon: 'success',
+            timer: 1500,
+            // buttons: true,
+            type: 'success'
+        });
+    </script>
+</div>
+<!--end thông báo-->
+
+<!--hero-->
+<div>
+    <th:block th:insert="old/public/fragments/html_home_hero.html::html_hero"></th:block>
+</div>
+<!--end hero-->
+
+<!--search result-->
+<div
+        th:if="${recruitmentMatches}!= null"
+>
+    <th:block th:insert="old/public/fragments/home/search-recruitment.html::search(${recruitmentMatches},${url})"></th:block>
+</div>
+<!--end search result-->
+
+<!--top list-->
+<div>
+    <th:block th:insert="old/public/fragments/html_topList.html::html_topList"></th:block>
+</div>
+<!--end top list-->
+
+<!--services-->
+<div>
+    <th:block th:insert="old/public/fragments/html_services.html::html_services"></th:block>
+</div>
+<!--end services-->
+
+<!--best recruiment-->
+<div>
+    <th:block th:insert="old/public/fragments/home/best-recruiment.html::best-recruiment(${bestPost})"></th:block>
+</div>
+<!--end best recruiment-->
+
+<!--footer-->
+<div>
+    <th:block th:insert="old/public/footer.html::footer"></th:block>
+</div>
+<!--end footer-->
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Login and register</title>
+    <th:block th:insert="old/public/fragments/html_head::html_head"></th:block>
+</head>
+<body>
+
+<!--navigation bar-->
+<nav>
+    <th:block th:insert="~{old/public/fragments/nav/html_nav.html::html_nav } "></th:block>
+</nav>
+<!--end navigation bar-->
+
+<!--basic hero-->
+<nav>
+    <th:block
+            th:insert="~{old/public/fragments/html_basic_hero.html::html_basic_hero('Danh sách công ty đã theo dõi', 'Công ty','/images/bg_1.jpg') } ">
+    </th:block>
+</nav>
+<!--end basic hero-->
+
+<!--content-->
+<section class="ftco-section bg-light" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 pr-lg-5">
+                <div th:if="${saveJobList.totalPages > 0}" class="row">
+                    <th:block th:each="company : ${saveJobList.content}">
+                        <div class="col-md-12 ">
+                            <div class="job-post-item p-4 d-block d-lg-flex align-items-center">
+                                <div class="one-third mb-4 mb-md-0">
+                                    <div class="job-post-item-header align-items-center">
+                                        <h2 class="mr-3 text-black" ><a th:text="${company.nameCompany}" th:href="'#'"></a></h2>
+                                    </div>
+                                    <div class="job-post-item-body d-block d-md-flex">
+                                        <div class="mr-3"><span class="icon-layers"></span> <a href="#" th:text="${company.email}" ></a></div>
+                                        <div class="mr-3"><span class="icon-my_location"></span> <span th:text="${company.address}"></span></div>
+                                        <div style="margin-left: 10px"><span class="icon-my_location"></span> <span th:text="${company.phoneNumber}"></span></div>
+                                    </div>
+                                </div>
+
+                                <input type="hidden" th:id="${'idRe'}+${company.id}" th:value="${company.id}">
+
+                                <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0" style="width:370px !important;">
+
+                                    <!-- Button trigger modal delete-->
+                                    <div>
+                                        <a data-toggle="modal" th:attr="data-target=@{#deleteModal{id}(id=${company.id})}"
+                                            class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
+                                            <span class="icon-delete"></span>
+                                        </a>
+                                    </div>
+                                    <!-- End Button trigger modal delete-->
+
+                                    <a th:href="@{/recruitment/all(companyId= ${company.id} )}" class="btn btn-warning py-2 ml-1">Danh sách bài đăng</a>
+                                </div>
+
+                            </div>
+
+                            <!-- modal delete-->
+                            <th:block
+                                    th:with="userId=${param.userId}"
+                                    th:insert="~{old/public/fragments/list-follow-company/modal/modal-delete.html :: delete(${company},userId)}">
+                            </th:block>
+                            <!-- end modal delete-->
+
+
+                        </div>
+                    </th:block>
+
+                </div>
+
+                <div style="text-align: center" th:if="${saveJobList.totalPages < 1}">
+                    <p style="color:red;">Danh sách trống</p>
+                </div>
+
+                <!-- pagination -->
+                <div class="row col-md-12">
+                    <div class="col text-center">
+                        <div    th:with="urlParam=${'&userId=' + param.userId}"
+                                class="d-flex justify-content-center align-items-center">
+                            <th:block
+                                    th:insert="~{old/public/fragments/test/page-item.html :: page-item(3, '/follow/listFollowedCompanies?', ${urlParam}, ${saveJobList})}">
+                            </th:block>
+                        </div>
+                    </div>
+                </div>
+                <!-- end pagination -->
+
+            </div>
+
+        </div>
+    </div>
+</section>
+<!--end content-->
+
+<!--footer-->
+<div>
+    <th:block th:insert="old/public/footer.html::footer"></th:block>
+</div>
+<!--end footer-->
+
+</body>
+</html>

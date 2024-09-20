@@ -1,0 +1,176 @@
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="html_hero">
+    <div
+            class="hero-wrap img"
+            style="background-image: url(/images/bg_1.jpg);"
+    >
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row d-md-flex no-gutters slider-text align-items-center justify-content-center">
+                <div class="col-md-10 d-flex align-items-center ">
+                    <div class="text text-center pt-5 mt-md-5">
+                        <p class="mb-4">Tìm việc làm, Cơ hội việc làm và Nghề nghiệp</p>
+                        <h1 class="mb-5">Cách dễ dàng nhất để có được công việc mới của bạn</h1>
+                        <div class="ftco-counter ftco-no-pt ftco-no-pb">
+                            <div class="row">
+                                <div class="col-md-4 d-flex justify-content-center counter-wrap ">
+                                    <div class="block-18">
+                                        <div class="text d-flex">
+                                            <div class="icon mr-2">
+                                                <span class="flaticon-career"></span>
+                                            </div>
+                                            <div class="desc text-left">
+                                                <strong class="number" data-number="46"
+                                                        th:text="${numberCandidate}"></strong>
+                                                <span>Ứng cử viên</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 d-flex justify-content-center counter-wrap ">
+                                    <div class="block-18 text-center">
+                                        <div class="text d-flex">
+                                            <div class="icon mr-2">
+                                                <span class="flaticon-visitor"></span>
+                                            </div>
+                                            <div class="desc text-left">
+                                                <strong class="number" data-number="450"
+                                                        th:text="${numberCompany}"></strong>
+                                                <span>Công ty</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 d-flex justify-content-center counter-wrap">
+                                    <div class="block-18 text-center">
+                                        <div class="text d-flex">
+                                            <div class="icon mr-2">
+                                                <span class="flaticon-resume"></span>
+                                            </div>
+                                            <div class="desc text-left">
+                                                <strong class="number" data-number="80000"
+                                                        th:text="${numberRecruitment}"></strong>
+                                                <span>Tuyển dụng</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ftco-search my-md-5">
+                            <div class="row">
+                                <div class="col-md-12 nav-link-wrap">
+                                    <div class="nav nav-pills text-center" id="v-pills-tab" role="tablist"
+                                         aria-orientation="vertical">
+                                        <a th:classappend="${session.sessionTab == 'recruitmentTitle' || session.sessionTab == null} ? ' active nav-link mr-md-1' : 'nav-link mr-md-1'" id="v-pills-1-tab" data-toggle="pill"
+                                           href="#v-pills-1" role="tab" aria-controls="v-pills-1" aria-selected="true">
+                                            Tìm công việc</a>
+                                        <a  th:classappend="${session.sessionTab == 'companyName'} ? ' active nav-link' : 'nav-link'"
+                                                 id="v-pills-2-tab" data-toggle="pill" href="#v-pills-2"
+                                           role="tab" aria-controls="v-pills-2" aria-selected="false">Tìm công ty</a>
+                                        <a  th:classappend="${session.sessionTab == 'companyLocation'} ? ' active nav-link' : 'nav-link'" id="v-pills-3-tab" data-toggle="pill" href="#v-pills-3"
+                                           role="tab" aria-controls="v-pills-3" aria-selected="false">
+                                            Tìm theo địa điểm</a>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 tab-wrap">
+
+                                    <div class="tab-content p-4" id="v-pills-tabContent">
+
+                                        <div class="tab-pane fade show active" id="v-pills-1" role="tabpanel"
+                                             aria-labelledby="v-pills-nextgen-tab">
+                                            <form th:action="@{/searchRecruitmentTitle}"
+                                                  method="get" class="search-job"
+                                            >
+                                                <div class="row no-gutters">
+                                                    <div class="col-md-10 mr-md-2">
+                                                        <div class="form-group">
+                                                            <div class="form-field">
+                                                                <div class="icon"><span class="icon-map-marker"></span></div>
+                                                                <input type="text" name="searchTerm" class="form-control"
+                                                                       placeholder="Tìm kiếm công việc">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!--  tìm kiếm theo mô tả công việc-->
+                                                    <div class="col-md">
+                                                        <div class="form-group">
+                                                            <div class="form-field">
+                                                                <button type="submit"  class="form-control btn btn-primary">
+                                                                    Tìm kiếm
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                        <div class="tab-pane fade" id="v-pills-2" role="tabpanel"
+                                             aria-labelledby="v-pills-performance-tab">
+                                            <form th:action="@{/searchCompanyName}"
+                                                  method="get" class="search-job"
+                                            >
+                                                <div class="row no-gutters">
+                                                    <div class="col-md-10 mr-md-2">
+                                                        <div class="form-group">
+                                                            <div class="form-field">
+                                                                <div class="icon"><span class="icon-map-marker"></span></div>
+                                                                <input type="text" name="searchTerm" class="form-control"
+                                                                       placeholder="Tìm kiếm công ty">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!--  tìm kiếm theo mô tả công việc-->
+                                                    <div class="col-md">
+                                                        <div class="form-group">
+                                                            <div class="form-field">
+                                                                <button type="submit"  class="form-control btn btn-primary">
+                                                                    Tìm kiếm
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+
+
+                                        <div class="tab-pane fade" id="v-pills-3" role="tabpanel"
+                                             aria-labelledby="v-pills-performance-tab">
+                                            <form th:action="@{/searchCompanyLocation}"
+                                                  method="get" class="search-job"
+                                            >
+                                                <div class="row no-gutters">
+                                                    <div class="col-md-10 mr-md-2">
+                                                        <div class="form-group">
+                                                            <div class="form-field">
+                                                                <div class="icon"><span class="icon-map-marker"></span></div>
+                                                                <input type="text" name="searchTerm" class="form-control"
+                                                                       placeholder="Tìm kiếm địa đểm">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!--  tìm kiếm theo mô tả công việc-->
+                                                    <div class="col-md">
+                                                        <div class="form-group">
+                                                            <div class="form-field">
+                                                                <button type="submit"  class="form-control btn btn-primary">
+                                                                    Tìm kiếm
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

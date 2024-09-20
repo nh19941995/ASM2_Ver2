@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" >
+<head>
+    <title>Login and register</title>
+    <th:block th:insert="old/public/fragments/html_head::html_head"></th:block>
+</head>
+<body>
+    <!--navigation bar-->
+    <nav>
+        <th:block th:insert="~{old/public/fragments/nav/html_nav.html::html_nav } "></th:block>
+    </nav>
+    <!--end navigation bar-->
+
+    <!--basic hero-->
+    <nav>
+        <th:block
+                th:insert="~{old/public/fragments/html_basic_hero.html::html_basic_hero('Danh sách công việc đã theo dõi', 'Công việc','/images/bg_1.jpg') } ">
+        </th:block>
+    </nav>
+    <!--end basic hero-->
+
+    <!--notice-->
+    <div th:if="${success}" class="toast" data-delay="2000"
+         style="position:fixed;top: 100PX; right: 10PX;z-index: 2000;width: 300px">
+        <script>
+            swal({
+                title: 'Duyệt thành công!',
+                /* text: 'Redirecting...', */
+                icon: 'success',
+                timer: 3000,
+                buttons: true,
+                type: 'success'
+            })
+        </script>
+    </div>
+    <!--end notice-->
+
+<section class="ftco-section bg-light" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 pr-lg-5">
+                <!--content-->
+                <div th:if="${saveJobList.totalPages > 0}" class="row">
+                    <th:block th:each="saveJob : ${saveJobList.content}">
+                        <div class="col-md-12 ">
+                            <div class="job-post-item p-4 d-block d-lg-flex align-items-center">
+                                <div class="one-third mb-4 mb-md-0">
+                                    <div class="job-post-item-header align-items-center">
+                                        <span class="subadge" th:text="${saveJob.type.name}"></span>
+                                        <h2 class="mr-3 text-black" ><a th:text="${saveJob.title}" th:href="@{/recruitment/detail(recruitmentId = ${saveJob.id})}"></a></h2>
+                                    </div>
+                                    <div class="job-post-item-body d-block d-md-flex">
+                                        <div class="mr-3"><span class="icon-layers"></span> <a href="#" th:text="${saveJob.company.nameCompany}" ></a></div>
+                                        <div><span class="icon-my_location"></span> <span th:text="${saveJob.address}"></span></div>
+                                    </div>
+                                </div>
+                                <input type="hidden" th:id="${'idRe'}+${saveJob.id}" th:value="${saveJob.id}">
+                                <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">
+<!--                                    <div th:with="paramUrl = ${param.userId}">-->
+<!--                                        <a  th:href="@{/follow/unFollowRecruitment(userId=${paramUrl},recruitmentId=${saveJob.id})}" class="icon text-center d-flex justify-content-center align-items-center icon mr-2">-->
+<!--                                            <span class="icon-delete"></span>-->
+<!--                                        </a>-->
+<!--                                    </div>-->
+
+
+                                    <!-- Button trigger modal delete-->
+                                    <div>
+                                        <a data-toggle="modal" th:attr="data-target=@{#deleteModal{id}(id=${saveJob.id})}"
+                                           class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
+                                            <span class="icon-delete"></span>
+                                        </a>
+                                    </div>
+                                    <!-- End Button trigger modal delete-->
+
+
+
+
+
+                                    <!--     Button trigger modal apply -->
+                                    <div sec:authorize="isAuthenticated()">
+                                        <button th:if="${company == null}" type="button" class="btn btn-primary py-2 ml-2" data-toggle="modal"
+                                                th:attr="data-target=@{#applyModal{id}(id=${saveJob.id})}"
+                                        >Apply</button>
+                                    </div>
+                                    <!-- End Button trigger modal detail-->
+
+                                </div>
+                            </div>
+
+
+                            <!-- modal delete-->
+                            <th:block
+                                    th:with="userId=${param.userId}"
+                                    th:insert="~{old/public/fragments/list-follow-post/modal/modal-delete.html :: delete(${saveJob},userId)}">
+                            </th:block>
+                            <!-- end modal delete-->
+
+
+                            <!-- Modal apply -->
+                            <th:block
+                                    th:insert="~{old/public/fragments/home/modal/moda-apply.html::moda-apply(${saveJob})} ">
+                            </th:block>
+                            <!-- End Modal apply -->
+
+                        </div>
+
+
+
+
+                        <!-- end -->
+                        <!-- Modal -->
+<!--                        <div class="modal fade" th:id="${'exampleModal'}+${saveJob.recruitment.id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
+<!--                            <div class="modal-dialog" role="document">-->
+<!--                                <div class="modal-content">-->
+<!--                                    <div class="modal-header">-->
+<!--                                        <h5 class="modal-title" id="exampleModalLabel">Ứng tuyển: <span th:text="${saveJob.recruitment.title}"></span></h5>-->
+<!--                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+<!--                                            <span aria-hidden="true">&times;</span>-->
+<!--                                        </button>-->
+<!--                                    </div>-->
+<!--                                    <form method="post" action="/user/apply-job">-->
+<!--                                        <div class="modal-body">-->
+<!--                                            <div class="row">-->
+<!--                                                <div class="col-12">-->
+<!--                                                    <select th:id="${'choose'}+${saveJob.recruitment.id}" th:onchange="'choosed(' +${saveJob.recruitment.id}+ ')'" class="form-control" aria-label="Default select example">-->
+<!--                                                        <option selected>Chọn phương thức nộp</option>-->
+<!--                                                        <option value="1">Dùng cv đã cập nhật</option>-->
+<!--                                                        <option value="2">Nộp cv mới</option>-->
+<!--                                                    </select>-->
+<!--                                                </div>-->
+<!--                                                <div th:id="${'loai1'}+${saveJob.recruitment.id}" style="display:none" class="col-12">-->
+<!--                                                    <label for="fileUpload"-->
+<!--                                                           class="col-form-label">Giới thiệu:</label>-->
+<!--                                                    <textarea rows="10" cols="3" class="form-control"  th:id="${'text'}+${saveJob.recruitment.id}" >-->
+
+<!--                                                    </textarea>-->
+<!--                                                </div>-->
+<!--                                                <div th:id="${'loai2'}+${saveJob.recruitment.id}" style="display:none" class="col-12">-->
+
+<!--                                                    <label for="fileUpload"-->
+<!--                                                           class="col-form-label">Chọn cv:</label>-->
+<!--                                                    <input type="file" class="form-control"-->
+<!--                                                           th:id="${'fileUpload'}+${saveJob.recruitment.id}" name="file"   required>-->
+<!--                                                    <label for="fileUpload"-->
+<!--                                                           class="col-form-label">Giới thiệu:</label>-->
+<!--                                                    <textarea rows="10" cols="3" class="form-control"  th:id="${'text'}+${saveJob.recruitment.id}" >-->
+
+<!--                                                    </textarea>-->
+<!--                                                </div>-->
+
+<!--                                            </div>-->
+<!--                                            <div class="modal-footer">-->
+<!--                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>-->
+<!--                                                <button type="button" th:id="${'button1'}+${saveJob.recruitment.id}" style="display: none" th:onclick="'apply1(' +${saveJob.recruitment.id}+ ')'" class="btn btn-primary">Nộp</button>-->
+<!--                                                <button type="button" th:id="${'button2'}+${saveJob.recruitment.id}" style="display: none" th:onclick="'apply(' +${saveJob.recruitment.id}+ ')'" class="btn btn-primary">Nộp</button>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </form>-->
+<!--                                    <form method="post" action="/user/apply-job">-->
+<!--                                        <div class="modal-body">-->
+<!--                                            <div class="row">-->
+<!--                                                <div class="col-12">-->
+<!--                                                    <label for="fileUpload"-->
+<!--                                                           class="col-form-label">Chọn cv:</label>-->
+<!--                                                    <input type="file" class="form-control"-->
+<!--                                                           th:id="${'fileUpload'}+${saveJob.recruitment.id}" name="file"   required>-->
+<!--                                                    <label for="fileUpload"-->
+<!--                                                           class="col-form-label">Giới thiệu:</label>-->
+<!--                                                    <textarea rows="10" cols="3" class="form-control"  th:id="${'text'}+${saveJob.recruitment.id}" >-->
+
+<!--                                                    </textarea>-->
+<!--                                                </div>-->
+
+<!--                                            </div>-->
+<!--                                            <div class="modal-footer">-->
+<!--                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>-->
+<!--                                                <button type="button" th:onclick="'apply(' +${saveJob.recruitment.id}+ ')'" class="btn btn-primary">Nộp</button>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </form>-->
+
+
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+                    </th:block>
+
+                </div>
+                <div style="text-align: center" th:if="${saveJobList.totalPages < 1}">
+                    <p style="color:red;">Danh sách trống</p>
+                </div>
+                <!--end content-->
+            </div>
+
+            <!-- pagination -->
+            <div class="row col-md-12">
+                <div class="col text-center">
+                    <div    th:with="urlParam=${'&userId=' + param.userId}"
+                            class="d-flex justify-content-center align-items-center">
+                        <th:block
+                                th:insert="~{old/public/fragments/test/page-item.html :: page-item(3, '/follow/listFollowedRecruiment?', ${urlParam}, ${saveJobList})}">
+                        </th:block>
+                    </div>
+                </div>
+            </div>
+            <!-- end pagination -->
+
+        </div>
+    </div>
+</section>
+
+<!--footer-->
+<div>
+    <th:block th:insert="old/public/footer.html::footer"></th:block>
+</div>
+<!--end footer-->
+
+</body>
+</html>

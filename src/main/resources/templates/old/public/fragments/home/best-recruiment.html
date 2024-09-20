@@ -1,0 +1,71 @@
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="best-recruiment(bestRecruiment)">
+    <section class="ftco-section bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-9 pr-lg-5">
+                    <div class="row justify-content-center pb-3">
+                        <div class="col-md-12 heading-section ">
+                            <span class="subheading">CÔNG VIỆC ĐƯỢC NHIỀU NGƯỜI ỨNG TUYỂN</span>
+                            <h2 class="mb-4">Các bài đăng về việc làm nổi bật</h2>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <!--best recruiment content-->
+                        <div
+                                th:if="${bestRecruiment}!= null"
+                        >
+                            <th:block th:insert="old/public/fragments/home/best-recruiment-content.html::best-recruiment-content(${bestRecruiment},'/bestPost')"></th:block>
+                        </div>
+                        <!--end best recruiment content-->
+                    </div>
+                </div>
+                <div class="col-lg-3 sidebar">
+                    <div class="row justify-content-center pb-3">
+                        <div class="col-md-12 heading-section ">
+                            <h2 class="mb-4">Công ty nổi bật</h2>
+                        </div>
+                    </div>
+                    <div th:each="recruiment : ${bestRecruiment}">
+                        <div class="sidebar-box">
+                            <div class="">
+                                <!-- company logo-->
+                                <a th:href="${'/user/detail-company/'}+${recruiment.company.id}" class="company-wrap">
+                                    <img th:src="@{'http://localhost:8080/logo/' + ${recruiment.company.logo}}" class="img-fluid" alt="Colorlib Free Template">
+                                </a>
+                                <!-- end company logo-->
+                                <div class="text p-3">
+                                    <!--  company name-->
+                                    <h3><a th:href="${'/user/detail-company/'}+${recruiment.company.id}" th:text="${recruiment.company.nameCompany}"></a></h3>
+                                    <!--  end company name-->
+
+                                    <!--  quantity-->
+                                    <p><span class="number" style="color: black" th:text="${recruiment.quantity}"></span>
+                                        <span>Vị trí ứng tuyển</span>
+                                    </p>
+                                    <!--  end quantity-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <th:block th:each="companies : ${companies}">
+                        <div class="sidebar-box">
+                            <div class="">
+                                <a th:href="${'/user/detail-company/'}+${companies[0]}" class="company-wrap">
+                                    <img th:src="${companies[2]}" class="img-fluid" alt="Colorlib Free Template">
+                                </a>
+                                <div class="text p-3">
+                                    <h3><a th:href="${'/user/detail-company/'}+${companies[0]}" th:text="${companies[1]}"></a></h3>
+                                    <p><span class="number" style="color: black" th:text="${companies[3]}"></span>
+                                        <span>Vị trí ứng tuyển</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

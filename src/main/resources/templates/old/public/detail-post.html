@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Login and register</title>
+    <th:block th:insert="old/public/fragments/html_head::html_head"></th:block>
+</head>
+<body>
+
+<!--navigation bar-->
+<nav>
+    <th:block th:insert="~{old/public/fragments/nav/html_nav.html::html_nav } "></th:block>
+</nav>
+<!--end navigation bar-->
+
+<!--thông báo-->
+<div th:if="${messages}" class="toast" data-delay="2500"
+     style="
+     /*position:fixed;*/
+     /*top: 100px;*/
+     /*right: 10px;*/
+     /*z-index: 2000;*/
+     /*width: 300px;*/
+     /*padding-bottom: 10px;*/
+">
+    <script th:inline="javascript">
+        swal({
+            title: /*[[${messages}]]*/,
+            // text: "That thing is still around?",
+            // icon: 'success',
+            timer: 1500,
+            // buttons: true,
+            type: 'success'
+        });
+    </script>
+</div>
+<!--end thông báo-->
+
+<!--basic hero-->
+<nav>
+    <th:block
+            th:insert="~{old/public/fragments/html_basic_hero.html::html_basic_hero('Chi tiết công vệc', 'Chi tiết','/images/bg_1.jpg') } ">
+    </th:block>
+</nav>
+<!--end basic hero-->
+
+<section style="margin-top: 10px" class="site-section">
+    <div class="container">
+        <div class="row align-items-center mb-5">
+            <div class="col-lg-8 mb-4 mb-lg-0">
+                <div class="d-flex align-items-center">
+                    <div class="border p-2 d-inline-block mr-3 rounded">
+                        <img width="100" height="100"
+                             th:src="@{'http://localhost:8080/logo/' + ${recruitment.getCompany().getLogo()}}"
+                             alt="Image">
+                    </div>
+                    <div>
+                        <h2 th:text="${recruitment.getTitle()}"></h2>
+                        <div>
+                            <span class="icon-briefcase mr-2"
+                                  th:text="${' '+recruitment.getCompany().getNameCompany()}">
+                            </span><a class="ml-0 mr-2 mb-2"></a>
+                            <span class="icon-room mr-2"
+                                  th:text="${' '+recruitment.getCompany().getAddress()}"></span><span
+                                class="m-2"></span>
+                            <span class="icon-clock-o mr-2"
+                                  th:text="${' '+recruitment.getType().name}"></span><span class="m-2"></span>
+                        </div>
+                        <input type="hidden">
+                    </div>
+                </div>
+            </div>
+
+            <!-- following và apply recruitment cho user-->
+            <div sec:authorize="hasRole('USER')" class="col-lg-4">
+                <div class="row">
+                    <div class="col-6">
+                        <!-- follow button-->
+                        <th:block
+                                th:insert="~{old/public/fragments/detail-post/follow-company-only-icon.html :: follow-company(recruiment)} ">
+                        </th:block>
+                        <!-- end follow button-->
+                    </div>
+                    <div class="col-6">
+                        <!-- apply button-->
+                        <a data-toggle="modal"
+                           th:attr="data-target=@{#applyModal{id}(id=${recruitment.id})}" class="btn btn-block btn-primary btn-md"
+                        >Ứng tuyển</a>
+                        <!-- end apply button-->
+                    </div>
+                </div>
+            </div>
+            <!-- Modal apply -->
+            <th:block
+                    th:insert="~{old/public/fragments/home/modal/moda-apply.html::moda-apply(${recruitment})} ">
+            </th:block>
+            <!-- End Modal apply -->
+
+            <!-- end following recruitment cho user-->
+
+        </div>
+        <!-- mô tả công việc-->
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="mb-5">
+                    <h3 class="h5 d-flex align-items-center mb-4 text-primary"><span
+                            class="icon-align-left mr-3"></span>Mô tả công việc</h3>
+                    <p th:utext="${recruitment.description}"></p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <!--  thông tin công việc-->
+                <div class="bg-light p-3 border rounded mb-4">
+                    <h3 class="text-primary  mt-3 h5 pl-3 mb-3 ">Tóm tắt công việc</h3>
+                    <ul class="list-unstyled pl-3 mb-0">
+                        <li class="mb-2"><strong class="text-black">Ngày tạo: </strong>
+                            <span th:text="${#temporals.format(recruitment.getCreatedAt(), 'dd/MM/yyyy')}"></span></li>
+                        <li class="mb-2"><strong class="text-black">Kiểu công việc: </strong>
+                            <span th:text="${recruitment.getCategory().name}"> </span></li>
+                        <li class="mb-2"><strong class="text-black">Loại công việc: </strong>
+                            <span th:text="${recruitment.getType().name}"> </span></li>
+                        <li class="mb-2"><strong class="text-black">Kinh nghiệm: </strong>
+                            <span th:text="${recruitment.getExperience()}"> </span></li>
+                        <li class="mb-2"><strong class="text-black">Địa chỉ: </strong>
+                            <span th:text="${recruitment.getAddress()}"> </span></li>
+                        <li class="mb-2"><strong class="text-black">Lương: </strong>
+                            <span th:text="${recruitment.getSalary()}"> </span></li>
+                        <li class="mb-2"><strong class="text-black">Số lượng: </strong>
+                            <span th:text="${recruitment.getQuantity()}"></span></li>
+                        <li class="mb-2"><strong class="text-black">Hạn nộp cv: </strong>
+                            <span th:text="${recruitment.getDeadline()}"> </span></li>
+                    </ul>
+                </div>
+                <!--  end thông tin công việc-->
+
+                <!--  Share -->
+                <div class="bg-light p-3 border rounded">
+                    <h3 class="text-primary  mt-3 h5 pl-3 mb-3 ">Share</h3>
+                    <div class="px-3">
+                        <a href="#" class="pt-3 pb-3 pr-3 pl-0"><span class="icon-facebook"></span></a>
+                        <a href="#" class="pt-3 pb-3 pr-3 pl-0"><span class="icon-twitter"></span></a>
+                        <a href="#" class="pt-3 pb-3 pr-3 pl-0"><span class="icon-linkedin"></span></a>
+                        <a href="#" class="pt-3 pb-3 pr-3 pl-0"><span class="icon-pinterest"></span></a>
+                    </div>
+                </div>
+                <!--  end Share -->
+            </div>
+        </div>
+        <!-- end mô tả công việc-->
+    </div>
+</section>
+<!-- modal ứng tuyển-->
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ứng tuyển: <span></span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="post" action="/user/apply-job">
+                <div class="modal-body">
+                    <div class="row">
+<!--                        <div class="col-12">-->
+<!--                            <label for="fileUpload"-->
+<!--                                   class="col-form-label">Chọn cv:</label>-->
+<!--                            <input type="file" class="form-control"-->
+<!--                                   th:id="${'fileUpload'}+${recruitment.id}" name="file" required>-->
+<!--                            <label for="fileUpload"-->
+<!--                                   class="col-form-label">Giới thiệu:</label>-->
+<!--                            <textarea rows="10" cols="3" class="form-control">-->
+
+<!--                            </textarea>-->
+<!--                        </div>-->
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                        <button type="button" th:onclick="'apply(' +${recruitment.id}+ ')'" class="btn btn-primary">
+                            Nộp
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+
+        </div>
+    </div>
+</div>
+<!-- end modal ứng tuyển-->
+
+<section class="site-section" id="next">
+    <div class="container">
+
+        <div sec:authorize="hasRole('MANAGER')" th:if="${applyPosts.getContent().size() > 0 }" class="row mb-5 justify-content-center">
+            <div class="col-md-7 text-center">
+                <h2 class="section-title mb-2" th:if="${applyPosts}">Danh sách ứng viên ứng tuyển</h2>
+                <h2 class="section-title mb-2" th:unless="${applyPosts}">Những công việc liên quan</h2>
+            </div>
+        </div>
+
+
+        <div sec:authorize="hasRole('MANAGER')" th:if="${applyPosts != null}" class="row">
+            <div class="col-lg-12 pr-lg-4">
+                <div class="row">
+                    <th:block th:if="${applyPosts.getContent().size() != 0}"
+                              th:each="applyPost : ${applyPosts.getContent()}">
+                        <div class="col-md-12" style="box-shadow: rgba(0, 0, 0, 0.4) 0px 0px 10px;margin: 20px auto;">
+                            <div class="team d-md-flex p-4 bg-white">
+                                <img class="img"
+                                     th:with="urlAvatar=${'http://localhost:8080/avatar/'}"
+                                     th:attr="src=${applyPost.cv.user.image != null
+                                     ? urlAvatar + applyPost.cv.user.image
+                                     : urlAvatar + 'default-avatar.png' }" />
+                                <div class="text pl-md-4">
+                                    <H5 class="location mb-0" th:text="${applyPost.cv.user.fullName}"></H5>
+                                    <p style="display: block;color: black" th:text="${applyPost.cv.user.address}"></p>
+                                    <span class="position" style="display: block;color: black"
+                                          th:text="${applyPost.cv.user.email}"></span>
+                                    <p class="mb-4" style="width: 700px" th:utext="${applyPost.cv.user.description}">.</p>
+
+                                    <!-- cv file-->
+                                    <div class="row">
+                                        <p><a href="#" th:if="${applyPost.cv.fileName != null}" class="btn btn-primary"
+                                              th:href="@{'/files/cv/'+ ${applyPost.cv.fileName}}">Xem cv</a>
+                                        </p>
+                                        <p th:if="${applyPost.status.statusName == 'BLOCK'}" style="margin-left: 10px"><a
+                                                class="btn btn-outline-primary"
+                                                th:href="${'/user/approve/'} +${applyPost.cv.user.id} +${'/'} +${recruitment.id}">Duyệt</a>
+                                        </p>
+                                        <p th:if="${applyPost.status.statusName == 'ACTIVE'}" style="margin-left: 10px;margin-top: 15px">
+                                            <span style="color: #1e7e34;font-weight: bold">Đã duyệt</span></p>
+                                    </div>
+                                    <!-- end cv file-->
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                    <th:block th:if="${applyPosts.getContent().size() == 0}">
+                        <p>Chưa có ứng cử viên nào ứng tuyển</p>
+                    </th:block>
+
+                    <!-- pagination -->
+                    <div sec:authorize="isAuthenticated()" class="row mt-5">
+                        <div class="col text-center">
+                            <div th:with="urlParam=${'&recruitmentId='+recruitment.id + '&userId='+ param.userId + '&companyId=' + param.companyId }"
+                                 class="d-flex justify-content-center align-items-center">
+                                <th:block
+                                        th:insert="~{old/public/fragments/test/page-item.html :: page-item(3, '/recruitment/detail', ${urlParam}, ${applyPosts})}">
+                                </th:block>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end pagination -->
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!--footer-->
+<div>
+    <th:block th:insert="old/public/footer.html::footer"></th:block>
+</div>
+<!--end footer-->
+
+</body>
+</html>

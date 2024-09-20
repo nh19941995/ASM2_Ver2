@@ -1,0 +1,32 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      lang="vi"
+>
+
+<div th:fragment="follow-btn(recruiment)">
+    <!-- đăng nhập mới hiện nút -->
+    <div sec:authorize="isAuthenticated()">
+
+        <!-- tạo biến isFollowed để kiểm soát việc đã theo dõi chưa -->
+        <!-- cú pháp .?[ ] Nó sẽ lọc thuộc tính của đối tượng trong danh sách dựa
+        trên điều kiện bên trong dấu ngoặc vuông sau đó tạo thành 1 mảng -->
+        <div th:with="isFollowed=${recruitment.followers.?[username == #authentication.name].size() > 0}">
+            <!-- Hiển thị nút theo dõi hoặc bỏ theo dõi dựa trên biến isFollowed -->
+            <div th:if="${isFollowed}">
+                <!-- Đã theo dõi -->
+                <a class="icon text-center d-flex justify-content-center align-items-center icon mr-2"
+                   th:href="@{/follow/unFollowRecruitment(userId=${user.id},recruitmentId=${recruitment.id})}">
+                    <span class="icon-heart text-danger"></span>
+                </a>
+            </div>
+
+            <div th:unless="${isFollowed}">
+                <!-- Chưa theo dõi -->
+                <a class="icon text-center d-flex justify-content-center align-items-center icon mr-2"
+                   th:href="@{/follow/followRecruitment(userId=${user.id},recruitmentId=${recruitment.id})}">
+                    <span class="icon-heart-o"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,74 @@
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="form_register" class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header text-white">
+                    <h2 class="mb-0">Đăng ký</h2>
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/auth/register}" method="post" th:object="${user}">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="fullName" class="form-label">Họ và tên:</label>
+                                <input type="text" th:field="*{fullName}" class="form-control" id="fullName" />
+                                <div th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}" class="text-danger"></div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="username" class="form-label">Tên đăng nhập:</label>
+                                <input type="text" th:field="*{username}" class="form-control" id="username" />
+                                <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-danger"></div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="password" class="form-label">Mật khẩu:</label>
+                                <input type="password" th:field="*{password}" class="form-control" id="password" />
+                                <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger"></div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">Email:</label>
+                                <input type="email" th:field="*{email}" class="form-control" id="email" />
+                                <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="phone" class="form-label">Số điện thoại:</label>
+                                <input type="tel" th:field="*{phone}" class="form-control" id="phone" />
+                                <div th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}" class="text-danger"></div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="address" class="form-label">Địa chỉ:</label>
+                                <input type="text" th:field="*{address}" class="form-control" id="address" />
+                                <div th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="text-danger"></div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Mô tả:</label>
+                            <textarea th:field="*{description}" class="form-control" id="description" rows="3"></textarea>
+                            <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="text-danger"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="role" class="form-label">Vai trò:</label>
+                            <select th:field="*{role.id}" class="form-select" id="role">
+                                <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.roleName}"></option>
+                            </select>
+                        </div>
+
+                        <div th:if="${error}" th:text="${error}" class="alert alert-danger"></div>
+                        <div th:if="${message}" th:text="${message}" class="alert alert-success"></div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Đăng ký</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

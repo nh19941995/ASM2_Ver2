@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>List apply posts</title>
+    <th:block th:insert="old/public/fragments/html_head::html_head"></th:block>
+</head>
+
+<body>
+
+<!--navigation bar-->
+<nav>
+    <th:block th:insert="~{old/public/fragments/nav/html_nav.html::html_nav } "></th:block>
+</nav>
+<!--end navigation bar-->
+
+<!--thông báo-->
+<div th:if="${messages}" id="message-container" th:data-message="${messages}" style="display: none;"></div>
+
+<script th:if="${messages}">
+    document.addEventListener('DOMContentLoaded', function () {
+        var messageContainer = document.getElementById('message-container');
+        var message = messageContainer.getAttribute('data-message');
+
+        swal({
+            title: message,
+            timer: 2000,
+            type: 'success'
+        });
+    });
+</script>
+<!--end thông báo-->
+
+<!--basic hero-->
+<nav>
+    <!--Danh sách ứng cử viên->Công việc-->
+    <th:block
+            th:insert="~{old/public/fragments/html_basic_hero.html::html_basic_hero('Danh sách công việc đã ứng tuyển', 'Công việc','/images/bg_1.jpg') } "></th:block>
+</nav>
+<!--end basic hero-->
+
+<section
+        th:with="saveJobList=${appliedPosts}"
+        class="ftco-section bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 pr-lg-5">
+                <div class="row">
+                    <th:block th:each="saveJob : ${saveJobList.content}">
+                        <div class="col-md-12 ">
+                            <div class="job-post-item p-4 d-block d-lg-flex align-items-center">
+                                <div class="one-third mb-4 mb-md-0">
+                                    <div class="job-post-item-header align-items-center">
+                                        <span class="subadge" th:text="${saveJob.recruitment.type.name}"></span>
+                                        <h2 class="mr-3 text-black">
+                                            <a th:text="${saveJob.recruitment.title}"
+                                               th:href="@{/recruitment/detail(recruitmentId=${saveJob.recruitment.id},userId=${param.userId},companyId=${saveJob.recruitment.company.id})}"></a></h2>
+                                    </div>
+                                    <div class="job-post-item-body d-block d-md-flex">
+                                        <div class="mr-3">
+                                            <span class="icon-layers"></span>
+                                            <a href="#" th:text="${saveJob.recruitment.Company.nameCompany}"></a>
+                                        </div>
+                                        <div>
+                                            <span class="icon-my_location"></span>
+                                            <span th:text="${saveJob.recruitment.address}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="hidden" th:id="${'idRe'}+${saveJob.recruitment.id}"
+                                       th:value="${saveJob.recruitment.id}">
+                                <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">
+                                    <div th:with="userId=${param.userId}">
+                                        <a th:href="@{/apply/removeApply(recruitmentId=${saveJob.recruitment.id},userId=${userId})}"
+                                           class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
+                                            <span class="icon-delete"></span>
+                                        </a>
+                                    </div>
+                                    <p th:if="${saveJob.status.id == 1}"
+                                       style="color: #1e7e34;font-weight: bold;margin-top: 10px">Đã duyệt</p>
+                                    <p th:if="${saveJob.status.id == 0}"
+                                       style="color: red;font-weight: bold;margin-top: 10px">Đợi duyệt</p>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+                <div style="text-align: center" th:if="${saveJobList.totalPages < 1}">
+                    <p style="color:red;">Danh sách trống</p>
+                </div>
+
+
+            </div>
+
+        </div>
+        <!--pagination-->
+        <div th:if="${appliedPosts.getContent().size() > 0}" class="row col-md-12">
+            <div class="col text-center">
+                <div
+                        th:with="urlParam=${'&userId=' + param.userId}"
+                        class="d-flex justify-content-center align-items-center">
+                    <th:block
+                            th:insert="~{old/public/fragments/test/page-item.html :: page-item(3,'/apply/allPostApply?', ${urlParam}, ${appliedPosts})}">
+                    </th:block>
+                </div>
+            </div>
+        </div>
+        <!--end pagination-->
+    </div>
+</section>
+
+<!--footer-->
+<div>
+    <th:block th:insert="old/public/footer.html::footer"></th:block>
+</div>
+<!--end footer-->
+
+</body>
+</html>

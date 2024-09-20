@@ -1,0 +1,133 @@
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="html_profile_formUpdateUser">
+<!--    <h1 th:text="${user}"></h1>-->
+
+    <form
+            th:action="${role.id == 1
+                ?'/user/updateUser?id=' + user.getId()
+                :'/company/updateManager?id=' + user.getId()
+            }"
+            method="post"
+            th:object="${user}"
+            th:attr="enctype=${role.id == 1 ? 'multipart/form-data' : ''}"
+    >  <!-- chỉ gửi cv với role là user -->
+        <input type="hidden" th:field="*{id}"/>
+        <div th:if="${role.getId()}==1" class="row align-items-center mb-5">
+            <div  class="col-lg-8 mb-4 mb-lg-0">
+                <div class="d-flex align-items-center">
+                    <div>
+                        <h2>Cập nhật thông tin</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-lg-12">
+                <div class="p-4 p-md-5 border rounded" >
+<!--                    <h3 class="text-black mb-5 border-bottom pb-2">Thông tin chi tiết</h3>-->
+
+                    <div th:if="${role.id == 1}" class="form-group container">
+<!--                    <div class="form-group container">-->
+                        <div class="row">
+                            <div class="col-xs-12 col-md-3">
+                                <label class="btn btn-primary btn-md btn-file">
+                                    Chọn CV (PDF) <input type="file" name="file" id="cvfile" hidden>
+                                </label>
+                            </div>
+
+                            <div class="col-xs-12 col-md-3">
+                                <div class="row ">
+                                    <div class="col-xs-12">
+                                        <span class="text-warning" id="tempCVFile" ></span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <span class="text-success" th:if="${cv.id != null}" th:text="${cv.fileName}"></span>
+                                        <span th:if="${cv.id == null}" th:text="'Bạn chưa thêm cv'"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-md-3">
+                                <a id="nameCv" th:if="${cv.id != null}" th:href="@{'/files/cv/' + ${cv.fileName}}">Xem CV</a>
+                                <a style="color: red; margin-left: 20px;" th:if="${cv.id != null}" data-toggle="modal" data-target="#exampleModal">Xóa CV</a>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input
+                                type="email"
+                                class="form-control"
+                                id="email"
+                                name="email"
+                                th:field="*{email}"
+                                required
+                                placeholder="you@yourdomain.com"
+                        >
+                        <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></div>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="job-title">Full name</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                name="fullName"
+                                th:field="*{fullName}"
+                                required id="job-title"
+                                placeholder="Full name"
+                        >
+                        <div th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}" class="text-danger"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="job-location">Địa chỉ</label>
+                        <input
+                                type="text"
+                                name="address"
+                                th:field="*{address}"
+                                class="form-control"
+                                id="job-location"
+                                placeholder="e.g. New York"
+                        >
+                        <div th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="text-danger"></div>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="job-phone">Số điện thoại</label>
+                        <input
+                                type="text"
+                                name="phoneNumber"
+                                th:field="*{phone}"
+                                class="form-control"
+                                id="job-phone"
+                                required
+                                placeholder="+ 84"
+                        >
+                        <div th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}" class="text-danger"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="editor">Mô tả bản thân</label>
+                        <textarea
+                                name="description"
+                                th:field="*{description}"
+                                class="form-control"
+                                id="editor"
+                                placeholder="Mô tả"
+                        ></textarea>
+                        <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="text-danger"></div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-12">
+                            <input type="submit" value="Lưu thông tin" class="btn px-4 btn-primary text-white">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>
