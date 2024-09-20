@@ -69,15 +69,23 @@
                                             <!--                                        >Xem chi tiết </button>-->
                                             <!-- End Button trigger modal detail-->
 
-                                            <a type="button" class="btn btn-primary py-2 ml-2"
+                                            <a type="button" class="btn btn-info py-2 ml-2"
                                                th:href="@{/recruitment/detail(recruitmentId=${recruitment.id},userId=${user.id},companyId=${recruitment.company.id})}"
                                             >Xem chi tiết </a>
 
                                             <a sec:authorize="hasRole('MANAGER')"  th:href="${urlUpdate}"
                                                class="btn btn-warning py-2 ml-2">Cập nhật</a>
 
+                                            <!--     Button trigger modal apply -->
+                                            <div sec:authorize="isAuthenticated()">
+                                                <button th:if="${company == null}" type="button" class="btn btn-primary py-2 ml-2" data-toggle="modal"
+                                                        th:attr="data-target=@{#applyModal{id}(id=${recruitment.id})}"
+                                                >Apply</button>
+                                            </div>
+                                            <!-- End Button trigger modal detail-->
+
                                             <!-- Button trigger modal delete-->
-                                            <button type="button" class="btn btn-danger py-2 ml-2" data-toggle="modal"
+                                            <button sec:authorize="hasRole('MANAGER')" type="button" class="btn btn-danger py-2 ml-2" data-toggle="modal"
                                                     th:attr="data-target=@{#deleteModal{id}(id=${recruitment.id})}"
                                             >Xóa
                                             </button>
@@ -92,6 +100,12 @@
                                 <!--                                    th:insert="~{old/public/fragments/post-list/modal/moda-detail.html::detail(${recruitment})} ">-->
                                 <!--                            </th:block>-->
                                 <!-- end modal detail-->
+
+                                <!-- Modal apply -->
+                                <th:block
+                                        th:insert="~{old/public/fragments/home/modal/moda-apply.html::moda-apply(${recruitment})} ">
+                                </th:block>
+                                <!-- End Modal apply -->
 
 
                                 <!-- modal delete-->
