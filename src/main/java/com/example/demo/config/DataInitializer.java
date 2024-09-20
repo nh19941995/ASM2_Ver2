@@ -88,21 +88,21 @@ public class DataInitializer {
         }
 
         if (userService.count() == 0) {
-            userService.addDataUser( "Nguyen Van An",
+            userService.addDataUser( "Nguyễn Văn An",
                     "nguyenvanan1", "nguyenvanan1",
                     "nguyenvanan1@gmail.com", "Ha Noi",
                     "0123456801", "Software Developer",
                     1L, 1L
             );
 
-            userService.addDataUser( "Tran Thi Binh", "tranthivinh2",
+            userService.addDataUser( "Trần Thị Bình", "tranthivinh2",
                     "tranthivinh2", "tranthivinh2@gmail.com",
                     "Ho Chi Minh City", "0123456802",
                     "Data Analyst", 2L, 2L
             );
 
             userService.addDataUser(
-                    "Le Van Cuong", "levancuong3",
+                    "Lê Văn Cường", "levancuong3",
                     "levancuong3", "levancuong3@gmail.com",
                     "Da Nang", "0123456803",
                     "Project Manager", 1L, 1L
