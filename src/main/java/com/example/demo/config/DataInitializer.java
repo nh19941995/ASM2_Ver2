@@ -116,7 +116,7 @@ public class DataInitializer {
             );
 
             userService.addDataUser(
-                    "Hoang Van Em", "hoangvanem5",
+                    "Hoàng Văn Quyên", "hoangvanem5",
                     "hoangvanem5", "hoangvanem5@gmail.com",
                     "Can Tho", "0123456805",
                     "System Administrator", 1L, 1L
