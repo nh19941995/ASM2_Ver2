@@ -49,7 +49,8 @@
 
                             <div class="col-12 form-group">
                                 <label th:for="'message'+${recruitment.id}">Giới thiệu:</label>
-                                <textarea th:id="'content'+${recruitment.id}" name="message" class="form-control"></textarea>
+                                <p th:text="${recruitment.id}"></p>
+                                <textarea th:id="'content'+${recruitment.id}" name="message" required class="form-control"></textarea>
                             </div>
                         </div>
                     </div>

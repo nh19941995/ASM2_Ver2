@@ -49,6 +49,7 @@
                                     <div class="job-post-item-header align-items-center">
                                         <span class="subadge" th:text="${saveJob.type.name}"></span>
                                         <h2 class="mr-3 text-black" ><a th:text="${saveJob.title}" th:href="@{/recruitment/detail(recruitmentId = ${saveJob.id})}"></a></h2>
+                                        <h1 th:text="${saveJob.id}"></h1>
                                     </div>
                                     <div class="job-post-item-body d-block d-md-flex">
                                         <div class="mr-3"><span class="icon-layers"></span> <a href="#" th:text="${saveJob.company.nameCompany}" ></a></div>
@@ -57,12 +58,6 @@
                                 </div>
                                 <input type="hidden" th:id="${'idRe'}+${saveJob.id}" th:value="${saveJob.id}">
                                 <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">
-<!--                                    <div th:with="paramUrl = ${param.userId}">-->
-<!--                                        <a  th:href="@{/follow/unFollowRecruitment(userId=${paramUrl},recruitmentId=${saveJob.id})}" class="icon text-center d-flex justify-content-center align-items-center icon mr-2">-->
-<!--                                            <span class="icon-delete"></span>-->
-<!--                                        </a>-->
-<!--                                    </div>-->
-
 
                                     <!-- Button trigger modal delete-->
                                     <div>
@@ -72,10 +67,6 @@
                                         </a>
                                     </div>
                                     <!-- End Button trigger modal delete-->
-
-
-
-
 
                                     <!--     Button trigger modal apply -->
                                     <div sec:authorize="isAuthenticated()">

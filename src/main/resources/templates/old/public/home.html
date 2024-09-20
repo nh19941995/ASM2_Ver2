@@ -6,14 +6,14 @@
 
 <head>
     <title>Work Cv</title>
-    <th:block th:insert="old/public/fragments/html_head::html_head"></th:block>
+    <th:block th:insert="~{old/public/fragments/html_head::html_head}"></th:block>
 </head>
 
 <body>
 
 <!--navigation bar-->
 <nav>
-    <th:block th:insert="old/public/fragments/nav/html_nav.html::html_nav"></th:block>
+    <th:block th:insert="~{old/public/fragments/nav/html_nav.html::html_nav}"></th:block>
 </nav>
 <!-- end navigation bar -->
 
@@ -42,7 +42,7 @@
 
 <!--hero-->
 <div>
-    <th:block th:insert="old/public/fragments/html_home_hero.html::html_hero"></th:block>
+    <th:block th:insert="~{old/public/fragments/html_home_hero.html::html_hero}"></th:block>
 </div>
 <!--end hero-->
 
@@ -56,25 +56,25 @@
 
 <!--top list-->
 <div>
-    <th:block th:insert="old/public/fragments/html_topList.html::html_topList"></th:block>
+    <th:block th:insert="~{old/public/fragments/html_topList.html::html_topList}"></th:block>
 </div>
 <!--end top list-->
 
 <!--services-->
 <div>
-    <th:block th:insert="old/public/fragments/html_services.html::html_services"></th:block>
+    <th:block th:insert="~{old/public/fragments/html_services.html::html_services}"></th:block>
 </div>
 <!--end services-->
 
 <!--best recruiment-->
 <div>
-    <th:block th:insert="old/public/fragments/home/best-recruiment.html::best-recruiment(${bestPost})"></th:block>
+    <th:block th:insert="~{old/public/fragments/home/best-recruiment.html::best-recruiment(${bestPost})}"></th:block>
 </div>
 <!--end best recruiment-->
 
 <!--footer-->
 <div>
-    <th:block th:insert="old/public/footer.html::footer"></th:block>
+    <th:block th:insert="~{old/public/footer.html::footer}"></th:block>
 </div>
 <!--end footer-->
 

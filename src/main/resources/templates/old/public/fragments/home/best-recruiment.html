@@ -16,7 +16,7 @@
                         <div
                                 th:if="${bestRecruiment}!= null"
                         >
-                            <th:block th:insert="old/public/fragments/home/best-recruiment-content.html::best-recruiment-content(${bestRecruiment},'/bestPost')"></th:block>
+                            <th:block th:insert="~{old/public/fragments/home/best-recruiment-content.html::best-recruiment-content(${bestRecruiment},'/bestPost')}"></th:block>
                         </div>
                         <!--end best recruiment content-->
                     </div>
