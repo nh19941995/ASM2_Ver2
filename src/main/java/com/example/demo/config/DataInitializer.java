@@ -151,7 +151,7 @@ public class DataInitializer {
             );
 
             userService.addDataUser(
-                    "Hoang Thi Kim", "hoangthikim10",
+                    "Hoàng Thị Kim", "hoangthikim10",
                     "hoangthikim10", "hoangthikim10@gmail.com",
                     "Bien Hoa", "0123456810",
                     "Content Writer", 2L, 2L
