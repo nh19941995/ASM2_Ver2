@@ -193,7 +193,7 @@
 <section class="site-section" id="next">
     <div class="container">
 
-        <div sec:authorize="hasRole('MANAGER')" th:if="${applyPosts.getContent().size() > 0 }" class="row mb-5 justify-content-center">
+        <div sec:authorize="hasRole('MANAGER')" th:if="${applyPosts != null }" class="row mb-5 justify-content-center">
             <div class="col-md-7 text-center">
                 <h2 class="section-title mb-2" th:if="${applyPosts}">Danh sách ứng viên ứng tuyển</h2>
                 <h2 class="section-title mb-2" th:unless="${applyPosts}">Những công việc liên quan</h2>
@@ -201,10 +201,11 @@
         </div>
 
 
-        <div sec:authorize="hasRole('MANAGER')" th:if="${applyPosts != null}" class="row">
+
+        <div sec:authorize="hasRole('MANAGER')" th:if="${applyPosts != null }" class="row">
             <div class="col-lg-12 pr-lg-4">
                 <div class="row">
-                    <th:block th:if="${applyPosts.getContent().size() != 0}"
+                    <th:block th:if="${applyPosts != null}"
                               th:each="applyPost : ${applyPosts.getContent()}">
                         <div class="col-md-12" style="box-shadow: rgba(0, 0, 0, 0.4) 0px 0px 10px;margin: 20px auto;">
                             <div class="team d-md-flex p-4 bg-white">
@@ -237,24 +238,22 @@
                             </div>
                         </div>
                     </th:block>
-                    <th:block th:if="${applyPosts.getContent().size() == 0}">
+                    <th:block th:if="${applyPosts == null }">
                         <p>Chưa có ứng cử viên nào ứng tuyển</p>
                     </th:block>
-
-                    <!-- pagination -->
-                    <div sec:authorize="isAuthenticated()" class="row mt-5">
-                        <div class="col text-center">
-                            <div th:with="urlParam=${'&recruitmentId='+recruitment.id + '&userId='+ param.userId + '&companyId=' + param.companyId }"
-                                 class="d-flex justify-content-center align-items-center">
-                                <th:block
-                                        th:insert="~{old/public/fragments/test/page-item.html :: page-item(3, '/recruitment/detail', ${urlParam}, ${applyPosts})}">
-                                </th:block>
-                            </div>
+                </div>
+                <!-- pagination -->
+                <div sec:authorize="isAuthenticated()" class="row mt-5">
+                    <div class="col text-center">
+                        <div th:with="urlParam=${'&recruitmentId='+recruitment.id + '&userId='+ param.userId + '&companyId=' + param.companyId }"
+                             class="d-flex justify-content-center align-items-center">
+                            <th:block
+                                    th:insert="~{old/public/fragments/test/page-item.html :: page-item(3, '/recruitment/detail', ${urlParam}, ${applyPosts})}">
+                            </th:block>
                         </div>
                     </div>
-                    <!-- end pagination -->
-
                 </div>
+                <!-- end pagination -->
             </div>
 
         </div>

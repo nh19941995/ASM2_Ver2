@@ -90,11 +90,14 @@ public class ApplyController {
             @RequestParam("recruitmentId") Long postId,
             @RequestParam("userId") Long userId,
             @RequestParam("message") String message,
-            RedirectAttributes redirectAttributes
+            RedirectAttributes redirectAttributes,
+            HttpSession session
     ) {
         boolean result = applyPostService.applyNewPostOldCV(userId, postId,message,redirectAttributes);
         if (result)redirectAttributes.addFlashAttribute("messages", "Ứng tuyển thành công");
-        return "redirect:/";
+        // lấy url từ session
+        String url = (String) session.getAttribute("currentUrl");
+        return "redirect:" + url;
     }
 
     // ứng tuyển bài đăng với CV mới

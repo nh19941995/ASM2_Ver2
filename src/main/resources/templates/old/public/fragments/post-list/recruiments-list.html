@@ -73,7 +73,7 @@
                                                th:href="@{/recruitment/detail(recruitmentId=${recruitment.id},userId=${user.id},companyId=${recruitment.company.id})}"
                                             >Xem chi tiết </a>
 
-                                            <a th:href="${urlUpdate}"
+                                            <a sec:authorize="hasRole('MANAGER')"  th:href="${urlUpdate}"
                                                class="btn btn-warning py-2 ml-2">Cập nhật</a>
 
                                             <!-- Button trigger modal delete-->

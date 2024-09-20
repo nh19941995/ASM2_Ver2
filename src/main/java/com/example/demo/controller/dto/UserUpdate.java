@@ -22,6 +22,8 @@ public class UserUpdate {
     @Email(message = "Email is not valid")
     private String email;
 
+    private String username;
+
     @NotBlank(message = "is required")
     private String address;
 
@@ -43,5 +45,6 @@ public class UserUpdate {
         this.image = user.getImage();
         this.phone = user.getPhone();
         this.description = user.getDescription();
+        this.username = user.getUsername();
     }
 }

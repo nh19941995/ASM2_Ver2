@@ -153,6 +153,7 @@ public class RecruitmentController {
     ) {
         // Kiểm tra xem người dùng có tồn tại và có quyền truy cập không
         userAccessChecker.checkUserAccess(userId, userDetails);
+        // Bắt đầu cập nhật Recruitment
         Recruitment recruitment = recruitmentService.findById(recruitmentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Recruitment not found"));
         model.addAttribute("recruitment", recruitment);
@@ -217,7 +218,8 @@ public class RecruitmentController {
             // Thêm các thuộc tính phân trang
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "5") int size,
-            HttpSession session
+            HttpSession session,
+            @AuthenticationPrincipal UserDetails userDetails
     ) {
         // Lấy danh sách các bản ghi ApplyPost theo recruitmentId
         Page<ApplyPost> applyPosts = applyPostService.findAllByRecruitmentId(
@@ -229,7 +231,12 @@ public class RecruitmentController {
                 .orElseThrow(() -> new ResourceNotFoundException("Recruitment not found"));
         // Thêm các thuộc tính vào model
         model.addAttribute("recruitment", recruitment);
-        model.addAttribute("applyPosts", applyPosts);
+
+        // nếu user là người tạo bài đăng thì hiển thị danh sách ứng viên đã ứng tuyển
+        if (recruitment.getCompany().getUser().getUsername().equals(userDetails.getUsername())) {
+            model.addAttribute("applyPosts", applyPosts);
+        }
+
         // lưu url hiện tại vào session
         String currentUrl = "/recruitment/detail?recruitmentId=" + recruitmentId;
         session.setAttribute("currentUrl", currentUrl);

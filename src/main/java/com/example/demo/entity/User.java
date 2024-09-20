@@ -155,6 +155,7 @@ public class User {
         this.image = userUpdate.getImage();
         this.phone = userUpdate.getPhone();
         this.description = userUpdate.getDescription();
+        this.username = userUpdate.getUsername();
     }
 
     public void removeCv() {

@@ -54,7 +54,7 @@
                                     </div>
                                     <!-- End Button trigger modal delete-->
 
-                                    <a th:href="@{/recruitment/all(companyId= ${company.id} )}" class="btn btn-warning py-2 ml-1">Danh sách bài đăng</a>
+                                    <a th:href="@{/recruitment/allByCompany(companyId= ${company.id} )}" class="btn btn-warning py-2 ml-1" th:text="'Danh sách bài đăng của '+${company.nameCompany}"></a>
                                 </div>
 
                             </div>
