@@ -87,7 +87,7 @@ public class GenericSearchRepositoryImpl<T, ID>
                         "%" + searchTerm.toLowerCase() + "%"
                     ),
                     // điều kiện statusId != 3
-                    cb.notEqual(pathStatusId, 3L)
+                    cb.greaterThan(pathStatusId, 1)
                 )
             );
         return entityManager.createQuery(query)
