@@ -1,31 +1,20 @@
 package com.example.demo.controller;
 
-import com.example.demo.controller.dto.UserUpdate;
-import com.example.demo.entity.Category;
-import com.example.demo.entity.Company;
 import com.example.demo.entity.Recruitment;
 import com.example.demo.entity.User;
-import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.service.*;
-import com.example.demo.utility.AddAttributesToModel;
 import com.example.demo.utility.CommonAttributesPopulator;
 import com.example.demo.utility.PaginationRequest;
 import com.example.demo.view.ViewConstants;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 @Controller
 public class HomeController {

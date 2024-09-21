@@ -124,7 +124,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<User> findAll(PaginationRequest paginationRequest) {
-        Page<User> userPage = userRepository.findAllByStatusIdLessThan(2L, paginationRequest.toPageable());
+        // chỉ lấy ra các user đã cập nhật cv và chưa bị block
+        Page<User> userPage = userRepository
+                .findAllByStatusIdLessThanAndCvIdGreaterThan(2L, 0L, paginationRequest.toPageable());
 
         if (paginationRequest.getPage() >= userPage.getTotalPages()) {
             throw new ResourceNotFoundException("The requested page does not exist");
