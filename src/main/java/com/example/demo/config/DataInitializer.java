@@ -1,6 +1,5 @@
 package com.example.demo.config;
 
-import com.example.demo.controller.dto.UserUpdate;
 import com.example.demo.entity.*;
 import com.example.demo.service.*;
 import jakarta.annotation.PostConstruct;

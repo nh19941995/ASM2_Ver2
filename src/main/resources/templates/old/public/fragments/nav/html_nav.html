@@ -24,7 +24,6 @@
                     <!-- nếu đã đăng nhập -->
                     <li sec:authorize="isAuthenticated()" class="nav-item">
                         <a
-                                th:href="@{'/user/profile/'+${#authentication.name}}"
                                 th:text="${#authentication.principal.username}"
                                 class="nav-link"
                                 style="min-width: 75px;"
