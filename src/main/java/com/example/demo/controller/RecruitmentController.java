@@ -263,9 +263,6 @@ public class RecruitmentController {
         return "redirect:/recruitment/all?userId=" + user.getId();
     }
 
-
-
-
     // xóa Recruitment
     // http://localhost:8080/recruitment/delete?recruitmentId=1&userId=2
     @PostMapping("/delete")
@@ -308,19 +305,16 @@ public class RecruitmentController {
         model.addAttribute("recruitment", recruitment);
 
         // nếu user là người tạo bài đăng thì hiển thị danh sách ứng viên đã ứng tuyển
-        if (recruitment.getCompany().getUser().getUsername().equals(userDetails.getUsername())) {
-            model.addAttribute("applyPosts", applyPosts);
+        if (userDetails.getUsername().equals(recruitment.getCompany().getUser().getUsername())) {
+            {
+                model.addAttribute("applyPosts", applyPosts);
+            }
+            // lưu url hiện tại vào session
+            String currentUrl = "/recruitment/detail?recruitmentId=" + recruitmentId;
+            session.setAttribute("currentUrl", currentUrl);
         }
-
-        // lưu url hiện tại vào session
-        String currentUrl = "/recruitment/detail?recruitmentId=" + recruitmentId;
-        session.setAttribute("currentUrl", currentUrl);
         return ViewConstants.DETAIL_POST_VIEW;
     }
-
-
-
-
 
 
 
