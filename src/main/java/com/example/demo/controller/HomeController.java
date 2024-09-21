@@ -30,11 +30,6 @@ import java.util.Set;
 @Controller
 public class HomeController {
     private final CategoryService categoryService;
-    private final UserService userService;
-    private final RoleService roleService;
-    private final StatusService statusService;
-    private final CompanyService companyService;
-    private final AddAttributesToModel addAttributesToModel;
     private final RecruitmentService recruitmentService;
     private final CommonAttributesPopulator commonAttributesPopulator;
 
@@ -48,13 +43,12 @@ public class HomeController {
     }
 
     @Autowired
-    public HomeController(CategoryService categoryService, UserService userService, RoleService roleService, StatusService statusService, CompanyService companyService, AddAttributesToModel addAttributesToModel, RecruitmentService recruitmentService, CommonAttributesPopulator commonAttributesPopulator) {
+    public HomeController(
+            CategoryService categoryService,
+            RecruitmentService recruitmentService,
+            CommonAttributesPopulator commonAttributesPopulator
+    ) {
         this.categoryService = categoryService;
-        this.userService = userService;
-        this.roleService = roleService;
-        this.statusService = statusService;
-        this.companyService = companyService;
-        this.addAttributesToModel = addAttributesToModel;
         this.recruitmentService = recruitmentService;
         this.commonAttributesPopulator = commonAttributesPopulator;
     }

@@ -69,10 +69,22 @@ public class GenericSearchRepositoryImpl<T, ID>
         for (int i = 1; i < nestedFields.length; i++) {
             path = path.get(nestedFields[i]);
         }
-        // Xây dựng câu lệnh WHERE với điều kiện LIKE và case-insensitive
+        // Xây dựng câu lệnh
         query.select(root)
-                .where(cb.like(cb.lower(path.as(String.class)), "%" + searchTerm.toLowerCase() + "%"));
-
+            .where(
+                // phương thức để kết hợp nhiều điều kiện AND
+                cb.and(
+                    // điều kiện LIKE
+                    cb.like(
+                        // chuyển đổi chuỗi thành chữ thường
+                        cb.lower(path.as(String.class)),
+                        // thêm ký tự % vào trước và sau chuỗi tìm kiếm
+                        "%" + searchTerm.toLowerCase() + "%"
+                    ),
+                    // điều kiện statusId < 3
+                    cb.lessThan(root.get("statusId"), 3)
+                )
+            );
         return entityManager.createQuery(query)
                 .setMaxResults(maxResults)
                 .getResultList();

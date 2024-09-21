@@ -18,4 +18,6 @@ public interface RecruitmentService extends
 {
     public Page<Recruitment> findAllByCompanyId(PaginationRequest paginationRequest, Long companyId);
     public Page<Recruitment> bestPost(PaginationRequest paginationRequest);
+    public Page<Recruitment> findAll(PaginationRequest paginationRequest);
+
 }

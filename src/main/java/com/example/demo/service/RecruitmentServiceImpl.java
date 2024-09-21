@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -74,7 +75,7 @@ public class RecruitmentServiceImpl implements RecruitmentService {
 
     @Override
     public Page<Recruitment> findAll(PaginationRequest paginationRequest) {
-        Page<Recruitment> recruitmentPage = recruitmentRepo.findAll(paginationRequest.toPageable());
+        Page<Recruitment> recruitmentPage = recruitmentRepo.findAllByStatusIdLessThan(3L, paginationRequest.toPageable());
 
         if (paginationRequest.getPage() > recruitmentPage.getTotalPages()) {
             throw new ResourceNotFoundException("The requested page does not exist");
@@ -90,17 +91,18 @@ public class RecruitmentServiceImpl implements RecruitmentService {
     @Transactional
     @Override
     public void deleteById(User user, Long id) {
-        // check quyền xóa
-        Recruitment recruitment = recruitmentRepo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Recruitment not found"));
-
-        if (recruitment.getCompany() == null
-                || recruitment.getCompany().getUser() == null
-                || !recruitment.getCompany().getUser().getId().equals(user.getId())) {
-            throw new IllegalArgumentException("You don't have permission to delete this recruitment");
+        // kiểm tra xem đã thêm thông tin công ty chưa
+        if (user.getCompany() == null){
+            throw new IllegalArgumentException("You need to add company information access this action.");
         }
-
-        recruitmentRepo.deleteById(id);
+        // kiểm tra xem recruitment thuộc công ty của user không
+        Recruitment recruitment = companyService.isRecruitmentBelongsToCompany(user.getCompany().getId(),id )
+                .orElseThrow(() -> new AccessDeniedException("You do not have permission to access this action"));
+        // xóa các thuộc tính liên quan
+        Status blocked = statusRepo.findById(3L)
+                .orElseThrow(() -> new IllegalArgumentException("Status not found"));
+        recruitment.setStatus(blocked);
+        recruitmentRepo.save(recruitment);
     }
 
     @Override

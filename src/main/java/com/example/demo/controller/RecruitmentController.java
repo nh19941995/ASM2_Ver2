@@ -266,17 +266,27 @@ public class RecruitmentController {
     @PostMapping("/delete")
     public String deleteRecruitment(
             @RequestParam("recruitmentId") Long recruitmentId,
-            @RequestParam("userId") Long userId,
-            @RequestParam("companyId") Long companyId,
-
-            @AuthenticationPrincipal UserDetails userDetails
+            RedirectAttributes redirectAttributes,
+            @AuthenticationPrincipal UserDetails userDetails,
+            HttpSession session
     ) {
-        // Kiểm tra xem người dùng có tồn tại và có quyền truy cập không
-        userAccessChecker.checkUserAccess(userId, userDetails);
-        User user = userService.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        recruitmentService.deleteById(user, recruitmentId);
-        return "redirect:/recruitment/all?userId=" + userId+ "&companyId=" + companyId;
+        try {
+            // lấy ra người dùng đang đăng nhập
+            User user = userService.findByUsername(userDetails.getUsername())
+                    .orElseThrow(() -> new AccessDeniedException("You do not have permission to access this action"));
+            // xóa Recruitment
+            recruitmentService.deleteById(user, recruitmentId);
+        }catch (Exception e){
+            // Xử lý ngoại lệ và thông báo
+            redirectAttributes.addFlashAttribute("messages", "Error: " + e.getMessage());
+            // lấy url từ session
+            String url = (String) session.getAttribute("currentUrl");
+            return "redirect:" + url;
+        }
+        redirectAttributes.addFlashAttribute("messages", "Xóa thành công!");
+        // lấy url từ session
+        String url = (String) session.getAttribute("currentUrl");
+        return "redirect:" + url;
     }
 
     // chi tiết Recruitment

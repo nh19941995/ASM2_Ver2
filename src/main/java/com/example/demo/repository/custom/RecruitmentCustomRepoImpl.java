@@ -1,5 +1,6 @@
 package com.example.demo.repository.custom;
 
+import com.example.demo.config.EnumStatus;
 import com.example.demo.entity.Recruitment;
 import com.example.demo.utility.PaginationRequest;
 import jakarta.persistence.EntityManager;
@@ -30,11 +31,12 @@ public class RecruitmentCustomRepoImpl implements RecruitmentCustomRepo {
     // Tìm kiếm các bản ghi Recruitment theo companyId và sắp xếp kết quả
     private List<Recruitment> fetchRecruitments(PaginationRequest paginationRequest, Long companyId) {
         // Tạo câu truy vấn HQL với mệnh đề ORDER BY để sắp xếp kết quả
-        String hql = "SELECT r FROM Recruitment r WHERE r.company.id = :companyId ORDER BY r." +
+        String hql = "SELECT r FROM Recruitment r WHERE r.company.id = :companyId AND r.status.statusName != :statusName ORDER BY r." +
                 paginationRequest.getSortBy() + " " + paginationRequest.getSortDirection();
 
         TypedQuery<Recruitment> query = entityManager.createQuery(hql, Recruitment.class);
         query.setParameter("companyId", companyId);
+        query.setParameter("statusName", EnumStatus.BLOCK.getName());
         // Vị trí bắt đầu lấy bản ghi
         query.setFirstResult(paginationRequest.getPage() * paginationRequest.getSize());
         // Số lượng bản ghi trên mỗi trang
@@ -71,14 +73,17 @@ public class RecruitmentCustomRepoImpl implements RecruitmentCustomRepo {
         String hql = "SELECT r " +
                 "FROM Recruitment r " +
                 "LEFT JOIN r.applyPosts a " +
+                "WHERE r.status.statusName != :statusName " +
                 "GROUP BY r " +
-                "ORDER BY r.quantity DESC, COUNT(a.id) DESC";
+                "ORDER BY r.quantity  " +
+                "DESC, COUNT(a.id) DESC";
 
         TypedQuery<Recruitment> query = entityManager.createQuery(hql, Recruitment.class);
         // Vị trí bắt đầu lấy bản ghi
         query.setFirstResult(paginationRequest.getPage() * paginationRequest.getSize());
         // Số lượng bản ghi trên mỗi trang
         query.setMaxResults(paginationRequest.getSize());
+        query.setParameter("statusName", EnumStatus.BLOCK.getName());
 
         // Lấy danh sách các bản ghi Recruitment
         List<Recruitment> recruitments = query.getResultList();
