@@ -155,5 +155,11 @@ public class UserController {
         return ViewConstants.LIST_USER_VIEW;
     }
 
+    @GetMapping("/all")
+    public String getAllUser(Model model) {
+        model.addAttribute("users", userService.findAll());
+        return "user/all";
+    }
+
 
 }

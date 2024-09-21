@@ -58,17 +58,22 @@ public class GenericSearchRepositoryImpl<T, ID>
     public List<T> customSearchRepository(String searchTerm, String fieldName, int maxResults) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<T> query = cb.createQuery(getDomainClass());
+        // getDomainClass trả về Class<T> của entity
+        // tức là đang tạo câu lệnh SELECT * FROM entity T
         Root<T> root = query.from(getDomainClass());
-
         // Tách chuỗi fieldName thành mảng nestedFields
         // chia chuỗi "company.nameCompany" thành mảng ["company", "nameCompany"]
         String[] nestedFields = fieldName.split("\\.");
         // Duyệt qua các trường lồng nhau:
         // root.get("company").get("nameCompany")
         Path<String> path = root.get(nestedFields[0]);
+        // path là đường dẫn đến trường nestedFields[0]
         for (int i = 1; i < nestedFields.length; i++) {
             path = path.get(nestedFields[i]);
         }
+        // pathStatusId là đường dẫn đến trường status.Id
+        Path<Integer> pathStatusId = root.get("status").get("Id");
+
         // Xây dựng câu lệnh
         query.select(root)
             .where(
@@ -81,8 +86,8 @@ public class GenericSearchRepositoryImpl<T, ID>
                         // thêm ký tự % vào trước và sau chuỗi tìm kiếm
                         "%" + searchTerm.toLowerCase() + "%"
                     ),
-                    // điều kiện statusId < 3
-                    cb.lessThan(root.get("statusId"), 3)
+                    // điều kiện statusId != 3
+                    cb.notEqual(pathStatusId, 3L)
                 )
             );
         return entityManager.createQuery(query)
@@ -92,5 +97,11 @@ public class GenericSearchRepositoryImpl<T, ID>
 
 }
 
-
+// nguyên tắc
+// 1: Root – Đại diện cho thực thể trong câu truy vấn
+//      (tương đương với FROM trong câu truy vấn SQL).
+// 2: Path – Truy cập các thuộc tính của thực thể
+//      (giống một biến đại diện cho thuộc tính)
+// 3: Predicate – Đại diện cho điều kiện trong câu truy vấn
+//      (Sử dụng các Predicate để tạo điều kiện lọc).
 
