@@ -24,9 +24,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Optional;
-
-
 @Controller
 @RequestMapping("/recruitment")
 public class RecruitmentController {
@@ -81,8 +78,6 @@ public class RecruitmentController {
             // xác thực người dùng
             @AuthenticationPrincipal UserDetails userDetails
     ) {
-        // Kiểm tra xem người dùng có tồn tại và có quyền truy cập không
-//        userAccessChecker.checkUserAccess(userId, userDetails);
         Page<Recruitment> recruitments = recruitmentService.findAllByCompanyId(
                 new PaginationRequest(page, size, sortBy, sortDirection),
                 companyId
@@ -116,10 +111,6 @@ public class RecruitmentController {
         // Thêm các thuộc tính vào model
         return ViewConstants.POST_LIST_VIEW;
     }
-
-
-
-
 
     // gọi form thêm mới Recruitment
     // http://localhost:8080/recruitment/addNew?userId=2
