@@ -128,16 +128,23 @@ public class RecruitmentController {
             Model model,
             @RequestParam("userId") Long userId,
             @AuthenticationPrincipal UserDetails userDetails,
-
-            RedirectAttributes redirectAttributes
+            RedirectAttributes redirectAttributes,
+            HttpSession session
     ) {
-        // Kiểm tra xem người dùng có tồn tại và có quyền truy cập không
-        userAccessChecker.checkUserAccess(userId, userDetails);
-        // Thêm các thuộc tính vào model
-        addAttributesToModel.addType(model, "types");
-        addAttributesToModel.addCategory(model, "categories");
-        model.addAttribute("recruitment", new Recruitment());
-
+        try {
+            // Kiểm tra xem người dùng có tồn tại và có quyền truy cập không
+            userAccessChecker.checkUserAccess(userId, userDetails);
+            // Thêm các thuộc tính vào model
+            addAttributesToModel.addType(model, "types");
+            addAttributesToModel.addCategory(model, "categories");
+            model.addAttribute("recruitment", new Recruitment());
+        }catch (Exception e){
+            // Xử lý ngoại lệ và thông báo
+            redirectAttributes.addFlashAttribute("messages", "Error: " + e.getMessage());
+            // lấy url từ session
+            String url = (String) session.getAttribute("currentUrl");
+            return "redirect:" + url;
+        }
         // Thêm các thuộc tính vào model
         return ViewConstants.POST_JOB_VIEW;
     }
@@ -164,7 +171,7 @@ public class RecruitmentController {
 
             // Bắt đầu cập nhật Recruitment
             Recruitment recruitment = companyService.isRecruitmentBelongsToCompany(user.getCompany().getId(),recruitmentId )
-                    .orElseThrow(() -> new AccessDeniedException("You do not have permission to access this action 2"));
+                    .orElseThrow(() -> new AccessDeniedException("You do not have permission to access this action"));
 
             // Thêm các thuộc tính vào model
             model.addAttribute("recruitment", recruitment);
