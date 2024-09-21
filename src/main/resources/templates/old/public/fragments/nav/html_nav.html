@@ -14,10 +14,9 @@
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item"><a href="/" class="nav-link">Trang chủ</a></li>
                     <li class="nav-item"><a th:href="@{/recruitment/all}" class="nav-link">Công việc</a></li>
-                    <li class="nav-item"><a href="/templates/old/public" class="nav-link">Ứng cử viên</a></li>
+                    <li class="nav-item"><a th:href="@{/allUser}" class="nav-link">Ứng cử viên</a></li>
                     <li sec:authorize="hasRole('MANAGER')" class="nav-item">
                         <a
-                                sec:authorize="isAuthenticated()"
                                 th:href="@{/recruitment/addNew(userId=${user.id})}"
                                 class="nav-link"
                         >Đăng tuyển</a>

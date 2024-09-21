@@ -30,8 +30,10 @@ public class ViewConstants {
     public static final String LIST_FOLLOWED_COMPANIES = "old/public/list-follow-company";
     // danh sách các bài đăng đã theo dõi
     public static final String LIST_FOLLOWED_POSTS = "old/public/list-follow-post";
+    // bảng thông tin về công ty (chưa dùng)
     public static final String POST_COMPANY = "old/public/post-company";
-
+    // danh sách toàn bộ ứng viên
+    public static final String LIST_ALL_USER = "old/public/list-all-users";
 
 
     public static final String TEST = "old/public/test";

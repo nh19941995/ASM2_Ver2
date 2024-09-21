@@ -124,7 +124,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<User> findAll(PaginationRequest paginationRequest) {
-        Page<User> userPage = userRepository.findAll(paginationRequest.toPageable());
+        Page<User> userPage = userRepository.findAllByStatusIdLessThan(2L, paginationRequest.toPageable());
 
         if (paginationRequest.getPage() >= userPage.getTotalPages()) {
             throw new ResourceNotFoundException("The requested page does not exist");

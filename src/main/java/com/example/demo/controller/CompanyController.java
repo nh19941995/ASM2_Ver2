@@ -6,7 +6,6 @@ import com.example.demo.service.*;
 import com.example.demo.utility.AddAttributesToModel;
 import com.example.demo.utility.CommonAttributesPopulator;
 import com.example.demo.utility.FileStorageService;
-import com.example.demo.utility.UserAccessChecker;
 import com.example.demo.view.ViewConstants;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

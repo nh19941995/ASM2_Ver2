@@ -7,10 +7,13 @@ import com.example.demo.entity.User;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.service.*;
 import com.example.demo.utility.FileStorageService;
+import com.example.demo.utility.PaginationRequest;
 import com.example.demo.utility.UserAccessChecker;
 import com.example.demo.view.ViewConstants;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -141,7 +144,7 @@ public class UserController {
 
     // lấy ra các user đã apply vào bài đăng của công ty mình
     // http://localhost:8080/user/delete/avatar?id=1
-    @GetMapping("/getAllapply")
+    @GetMapping("/allUser")
     public String getAll(
             Model model,
             @AuthenticationPrincipal UserDetails userDetails
@@ -155,11 +158,8 @@ public class UserController {
         return ViewConstants.LIST_USER_VIEW;
     }
 
-    @GetMapping("/all")
-    public String getAllUser(Model model) {
-        model.addAttribute("users", userService.findAll());
-        return "user/all";
-    }
+
+
 
 
 }

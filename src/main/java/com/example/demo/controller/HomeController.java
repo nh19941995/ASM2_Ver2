@@ -32,6 +32,7 @@ public class HomeController {
     private final CategoryService categoryService;
     private final RecruitmentService recruitmentService;
     private final CommonAttributesPopulator commonAttributesPopulator;
+    private final UserService userService;
 
     // Phương thức được đánh dấu bằng @ModelAttribute sẽ được gọi
     // trước khi bất kỳ phương thức xử lý request nào
@@ -43,14 +44,11 @@ public class HomeController {
     }
 
     @Autowired
-    public HomeController(
-            CategoryService categoryService,
-            RecruitmentService recruitmentService,
-            CommonAttributesPopulator commonAttributesPopulator
-    ) {
+    public HomeController(CategoryService categoryService, RecruitmentService recruitmentService, CommonAttributesPopulator commonAttributesPopulator, UserService userService) {
         this.categoryService = categoryService;
         this.recruitmentService = recruitmentService;
         this.commonAttributesPopulator = commonAttributesPopulator;
+        this.userService = userService;
     }
 
     // trang chủ
@@ -173,6 +171,27 @@ public class HomeController {
         String currentUrl = "/searchCompanyLocation?searchTerm=" + searchTerm + "&page=" + page + "&size=" + size + "&sortBy=" + sortBy + "&sortDirection=" + sortDirection;
         session.setAttribute("currentUrl", currentUrl);
         return ViewConstants.HOME;
+    }
+
+
+    @GetMapping("/allUser")
+    public String getAllUser(
+            Model model,
+            // Thêm các thuộc tính phân trang
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "5") int size,
+            @RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
+            @RequestParam(value = "sortDirection", defaultValue = "asc") String sortDirection,
+            HttpSession session
+    ) {
+        Page<User> users = userService.findAll(
+                new PaginationRequest(page, size, sortBy, sortDirection));
+        model.addAttribute("users", users);
+        // lưu url hiện tại vào session
+        String currentUrl = "/recruitment/all";
+        session.setAttribute("users", currentUrl);
+
+        return ViewConstants.LIST_ALL_USER;
     }
 
 

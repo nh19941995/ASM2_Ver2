@@ -101,6 +101,8 @@ public class RecruitmentController {
             @RequestParam(value = "sortDirection", defaultValue = "asc") String sortDirection,
             HttpSession session
     ) {
+
+
         Page<Recruitment> recruitments = recruitmentService.findAll(
                 new PaginationRequest(page, size, sortBy, sortDirection)
         );
@@ -108,7 +110,6 @@ public class RecruitmentController {
         // lưu url hiện tại vào session
         String currentUrl = "/recruitment/all";
         session.setAttribute("currentUrl", currentUrl);
-        // Thêm các thuộc tính vào model
         return ViewConstants.POST_LIST_VIEW;
     }
 
