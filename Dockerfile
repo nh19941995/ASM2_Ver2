@@ -5,5 +5,6 @@ FROM mysql:latest
 ENV MYSQL_ROOT_PASSWORD=yourpassword
 ENV MYSQL_DATABASE=funix_asm_2
 
+
 # Sao chép file init.sql vào thư mục khởi tạo của MySQL
 COPY init.sql /docker-entrypoint-initdb.d/
